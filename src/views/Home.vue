@@ -1,6 +1,4 @@
 <template>
-  <v-btn>dasdsa
-  </v-btn>
 </template>
 
 <script>
