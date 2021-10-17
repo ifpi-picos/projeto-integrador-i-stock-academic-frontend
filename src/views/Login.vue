@@ -4,8 +4,8 @@
       <v-col cols="12" md="6" class="align-center justify-center align-content-center ">
         <v-img class="image-leaf" src="../../public/img/leaf.jpeg"></v-img>
       </v-col>
-      <v-col cols="12" md="6" class="align-center justify-center  px-3 py-16 login">
-        <v-card
+      <v-col cols="12" md="6" class="align-center justify-center">
+        <v-card class="login px-6 py-16"
           elevation="0">
           <v-card-title class="justify-center"><h1> Login </h1></v-card-title>
           <v-form
@@ -19,8 +19,13 @@
                 v-model="email"
                 :rules="emailRules"
                 label="E-mail"
-                required
-              ></v-text-field>
+                required>
+                <v-icon
+                  slot="prepend-inner"
+                  color="#5EBC64">
+                  mdi-at
+                </v-icon>
+              </v-text-field>
             </v-col>
 
              <v-col cols="8" class="mx-auto">
@@ -34,8 +39,13 @@
                 hint="At least 8 characters"
                 class="input-group--focused"
                 @click:append="show = !show"
-                required
-              ></v-text-field>
+                required>
+                <v-icon
+                  slot="prepend-inner"
+                  color="#5EBC64">
+                  mdi-lock-outline
+                </v-icon>
+              </v-text-field>
             </v-col>
 
             <v-col cols="8" class="mx-auto text-right">
@@ -45,22 +55,24 @@
             </v-col>
 
              <v-col cols="8" class="mx-auto">
-              <v-hover
-                class="button"
-                v-slot="{ hover }">
-                <v-btn
-                  large
-                  :elevation="hover ? 16 : 2"
-                  :class="{ 'on-hover': hover }"
-                  block
-                  :disabled="!valid"
-                  color="success"
-                  @click="validate"
-                  to="/home"
-                >
-                  Entrar
-                </v-btn>
-              </v-hover>
+              <v-card-actions>
+                <v-hover
+                  class="button"
+                  v-slot="{ hover }">
+                  <v-btn
+                    large
+                    :elevation="hover ? 16 : 2"
+                    :class="{ 'on-hover': hover }"
+                    block
+                    :disabled="!valid"
+                    color="success"
+                    @click="validate"
+                    to="/home"
+                  >
+                    Entrar
+                  </v-btn>
+                </v-hover>
+              </v-card-actions>
              </v-col>
           </v-form>
         </v-card>

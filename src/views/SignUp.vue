@@ -1,105 +1,105 @@
 <template>
   <v-container fluid >
-        <v-card
-          class="px-3 py-16"
-          elevation="4">
-          <v-card-title class="justify-center"><h1> SignUp </h1></v-card-title>
-          <v-form v-model="valid" class="mt-10">
-            <v-row class="justify-center">
-              <v-col
-                cols="12"
-                md="4"
+    <v-card
+      class="px-3 py-16"
+      elevation="4">
+      <v-card-title class="justify-center"><h1> SignUp </h1></v-card-title>
+      <v-form v-model="valid" class="mt-10">
+        <v-row class="justify-center">
+          <v-col
+            cols="12"
+            md="4"
+          >
+            <v-text-field
+              v-model="firstname"
+              :rules="nameRules"
+              label="Nome"
+              required
+            ></v-text-field>
+          </v-col>
+
+          <v-col
+            cols="12"
+            md="4"
+          >
+            <v-text-field
+              v-model="lastname"
+              :rules="nameRules"
+              label="Sobrenome"
+              required
+            ></v-text-field>
+          </v-col>
+        </v-row>
+
+        <v-row class="justify-center mb-10">
+          <v-col
+            cols="12"
+            md="4"
+          >
+            <v-text-field
+              v-model="email"
+              :rules="emailRules"
+              label="E-mail"
+              required
+            ></v-text-field>
+          </v-col>
+
+          <v-col cols="12"
+            md="4">
+            <v-text-field
+              :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+              :rules="[rules.required, rules.min]"
+              :type="show ? 'text' : 'password'"
+              v-model="sigin"
+              name="input-10-2"
+              label="Senha"
+              hint="At least 8 characters"
+              class="input-group--focused"
+              @click:append="show = !show"
+              :counter="8"
+              required
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row class="justify-center">
+          <v-col cols="3">
+            <v-hover
+              v-slot="{ hover }">
+              <v-btn
+                large
+                :elevation="hover ? 16 : 2"
+                :class="{ 'on-hover': hover }"
+                block
+                color="success"
+                class="mr-4 justify-center"
+                @click="validate"
+                to="/home"
               >
-                <v-text-field
-                  v-model="firstname"
-                  :rules="nameRules"
-                  label="Nome"
-                  required
-                ></v-text-field>
-              </v-col>
+                Cadastrar
+              </v-btn>
+            </v-hover>
+          </v-col>
 
-              <v-col
-                cols="12"
-                md="4"
+            <v-col cols="3">
+            <v-hover
+              v-slot="{ hover }">
+              <v-btn
+                large
+                :elevation="hover ? 16 : 2"
+                :class="{ 'on-hover': hover }"
+                block
+                color="error"
+                class="mr-4 justify-center"
+                @click="validate"
+                to="/"
               >
-                <v-text-field
-                  v-model="lastname"
-                  :rules="nameRules"
-                  label="Sobrenome"
-                  required
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-row class="justify-center mb-10">
-              <v-col
-                cols="12"
-                md="4"
-              >
-                <v-text-field
-                  v-model="email"
-                  :rules="emailRules"
-                  label="E-mail"
-                  required
-                ></v-text-field>
-              </v-col>
-
-              <v-col cols="12"
-                md="4">
-                <v-text-field
-                  :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                  :rules="[rules.required, rules.min]"
-                  :type="show ? 'text' : 'password'"
-                  v-model="sigin"
-                  name="input-10-2"
-                  label="Senha"
-                  hint="At least 8 characters"
-                  class="input-group--focused"
-                  @click:append="show = !show"
-                  :counter="8"
-                  required
-                ></v-text-field>
-              </v-col>
-            </v-row>
-            <v-row class="justify-center">
-              <v-col cols="3">
-                <v-hover
-                  v-slot="{ hover }">
-                  <v-btn
-                    large
-                    :elevation="hover ? 16 : 2"
-                    :class="{ 'on-hover': hover }"
-                    block
-                    color="success"
-                    class="mr-4 justify-center"
-                    @click="validate"
-                    to="/home"
-                  >
-                    Cadastrar
-                  </v-btn>
-                </v-hover>
-              </v-col>
-
-               <v-col cols="3">
-                <v-hover
-                  v-slot="{ hover }">
-                  <v-btn
-                    large
-                    :elevation="hover ? 16 : 2"
-                    :class="{ 'on-hover': hover }"
-                    block
-                    color="error"
-                    class="mr-4 justify-center"
-                    @click="validate"
-                    to="/login"
-                  >
-                    Cancelar
-                  </v-btn>
-                </v-hover>
-              </v-col>
-            </v-row>
-          </v-form> 
-        </v-card>
+                Cancelar
+              </v-btn>
+            </v-hover>
+          </v-col>
+        </v-row>
+      </v-form> 
+    </v-card>
   </v-container>  
 </template>
 

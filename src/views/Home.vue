@@ -22,7 +22,7 @@
                   outlined
                   dark
                   large
-                  color="#C3AB6A">
+                  color="#887725">
                   <v-icon aria-hidden="false">
                     mdi-plus
                   </v-icon>
@@ -76,7 +76,7 @@
 
 <style scoped>
 .card-border {
-  border-top: 5px solid #C3AB6A !important;
+  border-top: 3px solid #C3AB6A !important;
 }
 
 .change-btn-color {

@@ -29,7 +29,7 @@
       <v-divider></v-divider>
 
       <v-card-text class="white--text">
-        {{ new Date().getFullYear() }} — <strong>Leaf</strong>
+        &copy CopyRights; {{ new Date().getFullYear() }} — <strong>Leaf</strong>
       </v-card-text>
     </v-card>
   </v-footer>
