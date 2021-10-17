@@ -38,6 +38,12 @@
               ></v-text-field>
             </v-col>
 
+            <v-col cols="8" class="mx-auto text-right">
+              <router-link to="signup">
+                ou Cadastre-se
+              </router-link>
+            </v-col>
+
              <v-col cols="8" class="mx-auto">
               <v-hover
                 class="button"
@@ -49,6 +55,7 @@
                   :disabled="!valid"
                   color="success"
                   @click="validate"
+                  to="/"
                 >
                   Entrar
                 </v-btn>
@@ -100,5 +107,9 @@ export default {
 .image-leaf {
   object-fit: contain;
   min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
 }
 </style>

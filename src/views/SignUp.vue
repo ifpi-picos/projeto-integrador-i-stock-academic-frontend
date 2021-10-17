@@ -72,8 +72,9 @@
                     color="success"
                     class="mr-4 justify-center"
                     @click="validate"
+                    to="/home"
                   >
-                    Entrar
+                    Cadastrar
                   </v-btn>
                 </v-hover>
               </v-col>
@@ -88,6 +89,7 @@
                     color="error"
                     class="mr-4 justify-center"
                     @click="validate"
+                    to="/"
                   >
                     Cancelar
                   </v-btn>
