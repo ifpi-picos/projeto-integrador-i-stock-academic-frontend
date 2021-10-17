@@ -1,8 +1,12 @@
 <template>
-  <v-app>
-    <Navbar></Navbar>
-    <router-view/>
-    <Footerbar class="fixed"></Footerbar>
+  <v-app class="background">
+     <Navbar style="margin-bottom: 128px"></Navbar>
+    <v-main>
+     
+      <router-view/>
+      
+    </v-main>
+    <Footerbar class="fixed-bottom"></Footerbar>
   </v-app>
 </template>
 
@@ -22,6 +26,6 @@
 
 <style scoped>
 .background {
-    background-color: #f1f0de; 
+  background-color: #f1f0de !important; 
 }
 </style>

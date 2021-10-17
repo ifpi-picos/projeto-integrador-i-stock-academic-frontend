@@ -55,7 +55,7 @@
                   :disabled="!valid"
                   color="success"
                   @click="validate"
-                  to="/admin"
+                  to="/home"
                 >
                   Entrar
                 </v-btn>

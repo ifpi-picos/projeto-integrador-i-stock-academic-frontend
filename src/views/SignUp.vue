@@ -72,7 +72,7 @@
                     color="success"
                     class="mr-4 justify-center"
                     @click="validate"
-                    to="/admin"
+                    to="/home"
                   >
                     Cadastrar
                   </v-btn>

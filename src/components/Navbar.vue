@@ -1,5 +1,5 @@
 <template>
-  <v-card class="overflow-hidden">
+  <v-card>
     <v-app-bar
       absolute
       color="#43a047"
@@ -20,7 +20,9 @@
 
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-      <v-app-bar-title>Leaf</v-app-bar-title>
+      <v-app-bar-title>
+        <v-img height="80" width="80" src="../../public/img/leaf.jpeg"></v-img>
+      </v-app-bar-title>
 
       <v-spacer></v-spacer>
 
@@ -36,12 +38,12 @@
         <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>
     </v-app-bar>
-    <v-sheet
+    <!-- <v-sheet
       id="scrolling-techniques-5"
       class="overflow-y-auto"
       max-height="600"
     >
       <v-container style="height: 1500px;"></v-container>
-    </v-sheet>
+    </v-sheet>-->
   </v-card>
 </template>

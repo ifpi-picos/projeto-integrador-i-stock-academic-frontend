@@ -1,12 +1,13 @@
 <template>
   <v-footer
+    absolute
     dark
     padless
   >
     <v-card
       flat
       tile
-      class="indigo lighten-1 white--text text-center"
+      class="footer lighten-6 white--text text-center"
     >
       <v-card-text>
         <v-btn
@@ -46,3 +47,9 @@
     }),
   }
 </script>
+
+<style scoped>
+.footer {
+  background-color: #887725 !important;
+}
+</style>
