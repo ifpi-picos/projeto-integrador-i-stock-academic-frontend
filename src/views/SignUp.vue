@@ -72,7 +72,7 @@
                     color="success"
                     class="mr-4 justify-center"
                     @click="validate"
-                    to="/home"
+                    to="/admin"
                   >
                     Cadastrar
                   </v-btn>
@@ -89,7 +89,7 @@
                     color="error"
                     class="mr-4 justify-center"
                     @click="validate"
-                    to="/"
+                    to="/login"
                   >
                     Cancelar
                   </v-btn>
