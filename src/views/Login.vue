@@ -49,6 +49,7 @@
                 class="button"
                 v-slot="{ hover }">
                 <v-btn
+                  large
                   :elevation="hover ? 16 : 2"
                   :class="{ 'on-hover': hover }"
                   block

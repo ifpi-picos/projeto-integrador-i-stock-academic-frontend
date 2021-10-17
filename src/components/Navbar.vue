@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card >
     <v-app-bar
       absolute
       color="#43a047"

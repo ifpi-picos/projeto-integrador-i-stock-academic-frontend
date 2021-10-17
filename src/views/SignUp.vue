@@ -66,6 +66,7 @@
                 <v-hover
                   v-slot="{ hover }">
                   <v-btn
+                    large
                     :elevation="hover ? 16 : 2"
                     :class="{ 'on-hover': hover }"
                     block
@@ -83,6 +84,7 @@
                 <v-hover
                   v-slot="{ hover }">
                   <v-btn
+                    large
                     :elevation="hover ? 16 : 2"
                     :class="{ 'on-hover': hover }"
                     block
