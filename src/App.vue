@@ -21,4 +21,5 @@ export default {
 .background {
   background-color: #F1F0DE;
 }
+
 </style>

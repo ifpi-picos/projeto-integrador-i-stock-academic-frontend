@@ -14,8 +14,8 @@
       <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
-          gradient="to top right, rgba(55,236,186,.7), rgba(25,32,72,.7)"
-        ></v-img>
+          gradient="to top right,  rgba(94, 188, 100, .7), rgba(136, 119, 37, .7)"
+        ></v-img><!-- gradient="to top right, rgba(55,236,186,.7), rgba(25,32,72,.7)" -->
       </template>
 
       <v-app-bar-nav-icon></v-app-bar-nav-icon>

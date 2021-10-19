@@ -4,7 +4,7 @@
       <v-card
         class="px-3 py-16"
         elevation="4">
-        <v-card-title class="justify-center"><h1> SignUp </h1></v-card-title>
+        <v-card-title class="justify-center" style="color: #887725 "><h1> SignUp </h1></v-card-title>
         <v-form v-model="valid" class="mt-10">
           <v-row class="justify-center">
             <v-col
@@ -87,7 +87,7 @@
                 <v-btn
                   large
                   :elevation="hover ? 16 : 2"
-                  :class="{ 'on-hover': hover }"
+                  :outlined="hover ? false : true"
                   block
                   color="success"
                   class="mr-4 justify-center"
@@ -105,7 +105,7 @@
                 <v-btn
                   large
                   :elevation="hover ? 16 : 2"
-                  :class="{ 'on-hover': hover }"
+                  :outlined="hover ? false : true"
                   block
                   color="error"
                   class="mr-4 justify-center"
@@ -161,6 +161,10 @@ export default {
   justify-content: center;
   vertical-align:middle;
   display:table-cell;
+}
+
+.theme--light.v-input, .theme--light.v-input input, .theme--light.v-input textarea {
+  color: #5EBC64 !important;
 }
 
 </style>

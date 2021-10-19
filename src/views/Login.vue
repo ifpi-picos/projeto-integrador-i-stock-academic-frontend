@@ -7,7 +7,7 @@
       <v-col cols="12" md="6" class="align-center justify-center">
         <v-card class="login px-6 py-16"
           elevation="0">
-          <v-card-title class="justify-center"><h1> Login </h1></v-card-title>
+          <v-card-title style="color: #887725 " class="justify-center"><h1> Login </h1></v-card-title>
           <v-form
             class="mt-16"
             ref="form"
@@ -49,7 +49,7 @@
             </v-col>
 
             <v-col cols="8" class="mx-auto text-right">
-              <router-link to="signup">
+              <router-link style="color: #887725" to="signup">
                 ou Cadastre-se
               </router-link>
             </v-col>
@@ -62,7 +62,7 @@
                   <v-btn
                     large
                     :elevation="hover ? 16 : 2"
-                    :class="{ 'on-hover': hover }"
+                    :outlined="hover ? false : true"
                     block
                     :disabled="!valid"
                     color="success"
@@ -124,5 +124,9 @@ export default {
 
 a {
   text-decoration: none;
+}
+
+.theme--light.v-input, .theme--light.v-input input, .theme--light.v-input textarea {
+  color: #5EBC64 !important;
 }
 </style>

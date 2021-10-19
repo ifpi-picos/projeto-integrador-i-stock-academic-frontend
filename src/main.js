@@ -8,6 +8,8 @@ import vuetify from './plugins/vuetify'
 // Import axios
 import './service'
 
+// Import Scss arquive
+import './assets/css/style.scss'
 Vue.config.productionTip = false
 
 new Vue({
