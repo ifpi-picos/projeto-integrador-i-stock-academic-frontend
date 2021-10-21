@@ -1,30 +1,46 @@
 <template>
-  <v-simple-table
-    fixed-header
-    height="300px"
-  >
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-left">
-            Nome
-          </th>
-          <th class="text-left">
-            ID Carteira
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="item in desserts"
-          :key="item.name"
-        >
-          <td>{{ item.name }}</td>
-          <td>{{ item.idWallets }}</td>
-        </tr>
-      </tbody>
-    </template>
-  </v-simple-table>
+  <v-layout fill-height class="justify-center align-center">
+    <v-container fluid>
+      <v-row class="justify-center">
+        <v-col cols="4">
+          <v-hover v-slot="{ hover }">
+            <v-card :elevation="hover ? 16 : 1"
+              class="card-border">
+              <v-card-title class="">Carteiras</v-card-title>
+
+              <v-simple-table
+                fixed-header
+                height="300px"
+              >
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th class="text-left">
+                        Nome
+                      </th>
+                      <th class="text-left">
+                        ID Carteira
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="item in desserts"
+                      :key="item.name"
+                    >
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.idwallets }}</td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </v-card>
+          </v-hover>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-layout>
+
 </template>
 
 <script>
@@ -34,43 +50,43 @@
         desserts: [
           {
             name: 'Frozen Yogurt',
-            idWallets: 159,
+            idwallets: 159,
           },
           {
             name: 'Ice cream sandwich',
-            idWallets: 237,
+            idwallets: 237,
           },
           {
             name: 'Eclair',
-            idWallets: 262,
+            idwallets: 262,
           },
           {
             name: 'Cupcake',
-            idWallets: 305,
+            idwallets: 305,
           },
           {
             name: 'Gingerbread',
-            idWallets: 356,
+            idwallets: 356,
           },
           {
             name: 'Jelly bean',
-            idWallets: 375,
+            idwallets: 375,
           },
           {
             name: 'Lollipop',
-            idWallets: 392,
+            idwallets: 392,
           },
           {
             name: 'Honeycomb',
-            idWallets: 408,
+            idwallets: 408,
           },
           {
             name: 'Donut',
-            idWallets: 452,
+            idwallets: 452,
           },
           {
             name: 'KitKat',
-            idWallets: 518,
+            idwallets: 518,
           },
         ],
       }
