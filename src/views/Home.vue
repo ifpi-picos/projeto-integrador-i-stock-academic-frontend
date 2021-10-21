@@ -70,12 +70,14 @@
 
 <script>
 import AddWallet from '@/components/AddWallet'
+import Alert from '@/components/Alert'
 
   export default {
     name: 'Home',
 
     components: {
-      AddWallet
+      AddWallet,
+      Alert
     },
   }
 </script>

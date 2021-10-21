@@ -2,7 +2,9 @@
   <v-app class="background">
     <v-main>
       <Navbar style="margin-bottom: 128px"></Navbar>
-      <router-view/>
+      <Alert />
+      <router-view>
+      </router-view>
       <Footerbar class="fixed-bottom"></Footerbar>
     </v-main>
   </v-app>
@@ -11,13 +13,16 @@
 <script>
   import Navbar from '@/components/Navbar'
   import Footerbar from '@/components/Footerbar'
+  
+  import Alert from '@/components/Alert'
 
   export default {
     name: 'Home',
 
     components: {
       Navbar,
-      Footerbar
+      Footerbar,
+      Alert
     },
   }
 </script>
