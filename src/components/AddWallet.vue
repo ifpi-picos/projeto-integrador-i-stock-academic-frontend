@@ -28,18 +28,6 @@
           </v-card-title>
           <v-card-text>
             <v-container>
-              <v-alert
-                :value="alert"
-                border="left"
-                color="#5EBC64"
-                dense
-                outlined
-                prominent
-                text
-                type="success"
-                transition="scale-transition">
-                {{ message }}
-              </v-alert>
               <v-row>
                 <v-col >
                   <v-hover v-slot="{ hover }">
@@ -155,9 +143,9 @@
                 :outlined="hover ? false : true"
                 color="success"
                 class="mr-4 justify-center"
-                @click="dialog = false"
+                @click="saveWallet()"
               >
-                Cadastrar
+                Salvar
               </v-btn>
             </v-hover>
             <v-hover
@@ -188,25 +176,30 @@ export default {
     return {
       dialog: false,
       isLoading: false,
-      message: '',
       wallet: '',
-      alert: false
     }
   },
 
   methods: {
     generateWallet () {
       this.isLoading = true
+      
       setTimeout(() => {
         this.isLoading = false
-        this.message = 'Sua carteira foi cadastrada com sucesso!'
         this.wallet = 'sdadasdsadas das da'
-        this.alert = true
       }, 5000)
-      this.alert = false
+    },
+
+    saveWallet () {
+      this.dialog = false
       
-    } 
-  }
+      this.$store.dispatch('CHANGE_ALERT', true)
+
+      setTimeout(() => {
+        this.$store.dispatch('CHANGE_ALERT', false)
+      }, 5000)
+    }
+  },
 }
 </script>
 
