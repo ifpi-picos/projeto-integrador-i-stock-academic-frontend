@@ -36,6 +36,12 @@ const routes = [
     path: '/add-wallet',
     name: 'AddWallet',
     component: () => import('../components/AddWallet.vue')
+  },
+
+  {
+    path: '/list-wallets',
+    name: 'ListWallets',
+    component: () => import('../views/ListWallets.vue')
   }
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
