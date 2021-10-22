@@ -1,41 +1,38 @@
 <template>
-  <v-layout fill-height class="justify-center align-center">
+  <v-layout class="justify-center align-center">
     <v-container fluid>
       <v-row class="justify-center">
-        <v-col cols="4">
-          <v-hover v-slot="{ hover }">
-            <v-card :elevation="hover ? 16 : 1"
-              class="card-border">
-              <v-card-title class="">Carteiras</v-card-title>
+        <v-col cols="12" md="8">
+          <v-card elevation="6"
+            class="card-border">
+            <v-card-title class="">Carteiras</v-card-title>
 
-              <v-simple-table
-                fixed-header
-                height="300px"
-              >
-                <template v-slot:default>
-                  <thead>
-                    <tr>
-                      <th class="text-left">
-                        Nome
-                      </th>
-                      <th class="text-left">
-                        ID Carteira
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="item in desserts"
-                      :key="item.name"
-                    >
-                      <td>{{ item.name }}</td>
-                      <td>{{ item.idwallets }}</td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-card>
-          </v-hover>
+            <v-simple-table
+              fixed-header
+            >
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">
+                      Nome
+                    </th>
+                    <th class="text-left">
+                      ID Carteira
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="item in desserts"
+                    :key="item.name"
+                  >
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.idwallets }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
