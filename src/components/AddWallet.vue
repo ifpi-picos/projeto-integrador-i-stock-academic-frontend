@@ -56,6 +56,7 @@
                     </v-btn>
                   </v-hover>
                 </v-col>
+
                 <!-- <v-col
                   cols="12"
                   sm="6"
@@ -130,6 +131,21 @@
                   </span>
                 </v-col>
               </v-row>
+
+              <v-row v-if="wallet">
+                <v-col>
+                  <v-text-field
+                    v-model="fullname"
+                    label="Nome Completo"
+                    required
+                  >
+                    <v-icon slot="prepend-inner" color="#5EBC64">
+                      mdi-account-outline
+                    </v-icon>
+                  </v-text-field>
+                </v-col>
+              </v-row>
+
             </v-container>
             <!-- <small>*indicates required field</small> -->
           </v-card-text>
@@ -177,6 +193,7 @@ export default {
       dialog: false,
       isLoading: false,
       wallet: '',
+      fullname: ''
     }
   },
 

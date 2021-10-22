@@ -17,6 +17,12 @@ const routes = [
         name: 'Home',
         component: Home
       },
+
+      {
+        path: '/list-wallets',
+        name: 'ListWallets',
+        component: () => import('../views/ListWallets.vue')
+      }
     ]
   },
   
@@ -36,7 +42,9 @@ const routes = [
     path: '/add-wallet',
     name: 'AddWallet',
     component: () => import('../components/AddWallet.vue')
-  }
+  },
+
+  
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
