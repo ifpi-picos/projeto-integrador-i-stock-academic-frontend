@@ -52,7 +52,8 @@
                     outlined
                     dark
                     large
-                    color="#887725">
+                    color="#887725"
+                    to="/list-wallets">
                     <v-icon aria-hidden="false">
                       mdi-format-list-bulleted
                     </v-icon>

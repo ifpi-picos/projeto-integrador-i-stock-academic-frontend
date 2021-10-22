@@ -158,6 +158,7 @@
                 :elevation="hover ? 16 : 0"
                 :outlined="hover ? false : true"
                 color="success"
+                tile
                 class="mr-4 justify-center"
                 @click="saveWallet()"
               >
@@ -171,6 +172,7 @@
                 :elevation="hover ? 16 : 0"
                 :outlined="hover ? false : true"
                 color="error"
+                tile
                 class="mr-4 justify-center"
                 @click="dialog = false"
               >

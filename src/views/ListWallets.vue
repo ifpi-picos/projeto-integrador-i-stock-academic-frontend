@@ -22,6 +22,9 @@
                     <th class="text-left">
                       Saldo
                     </th>
+                    <th class="text-center">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -32,6 +35,40 @@
                     <td>{{ item.name }}</td>
                     <td>{{ item.idwallets }}</td>
                     <td>{{ item.idwallets }}</td>
+                    <td class="text-center">
+                      <v-hover
+                        v-slot="{ hover }">
+                        <v-btn
+                          x-small
+                          :elevation="hover ? 16 : 0"
+                          outlined
+                          :class="hover ? 'change-btn-color' : ''"
+                          dark
+                          color="#887725"
+                          class="mr-4 justify-center py-3 px-1"
+                          @click="setBalance('add')"
+                        >
+                          <v-icon>mdi-plus</v-icon>
+                          Saldo
+                        </v-btn>
+                      </v-hover>
+
+                      <v-hover
+                        v-slot="{ hover }">
+                        <v-btn
+                          x-small
+                          :elevation="hover ? 16 : 0"
+                          :outlined="hover ? false : true"
+                          dark
+                          color="error"
+                          class="mr-4 justify-center py-3 px-1"
+                          @click="setBalance('minus')"
+                        >
+                          <v-icon>mdi-minus</v-icon>
+                          Saldo
+                        </v-btn>
+                      </v-hover>
+                    </td>
                   </tr>
                 </tbody>
               </template>
@@ -92,5 +129,22 @@
         ],
       }
     },
+
+    methods: {
+      setBalance (action) {
+        this.$router.push('/balance')
+        this.$store.dispatch('ADD_BALANCE', action)
+      },
+    }
   }
 </script>
+
+<style scoped>
+.change-btn-color {
+  color: #fff !important;
+  background-color: #5EBC64;
+  border-color: #5EBC64;
+  position: relative;
+  bottom: 2px;
+}
+</style>

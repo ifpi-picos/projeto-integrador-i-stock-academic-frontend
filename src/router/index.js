@@ -22,7 +22,7 @@ const routes = [
         path: '/list-wallets',
         name: 'ListWallets',
         component: () => import('../views/ListWallets.vue')
-      }
+      },
     ]
   },
   
@@ -43,6 +43,12 @@ const routes = [
     name: 'AddWallet',
     component: () => import('../components/AddWallet.vue')
   },
+
+  {
+    path: '/balance',
+    name: 'Balance',
+    component: () => import('../components/Balance.vue')
+  }
 
   
     // route level code-splitting
