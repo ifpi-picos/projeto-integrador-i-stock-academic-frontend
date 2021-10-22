@@ -5,7 +5,7 @@
         <v-col cols="12" md="8">
           <v-card elevation="6"
             class="card-border">
-            <v-card-title class="">Carteiras</v-card-title>
+            <v-card-title class="">Lista de Carteiras</v-card-title>
 
             <v-simple-table
               fixed-header
@@ -17,7 +17,10 @@
                       Nome
                     </th>
                     <th class="text-left">
-                      ID Carteira
+                      Carteira
+                    </th>
+                    <th class="text-left">
+                      Saldo
                     </th>
                   </tr>
                 </thead>
@@ -27,6 +30,7 @@
                     :key="item.name"
                   >
                     <td>{{ item.name }}</td>
+                    <td>{{ item.idwallets }}</td>
                     <td>{{ item.idwallets }}</td>
                   </tr>
                 </tbody>
