@@ -6,7 +6,7 @@
         persistent
         max-width="600px"
       >
-        <template v-slot:activator="{ on, attrs }">
+        <!-- <template v-slot:activator="{ on, attrs }">
           <v-btn
             color="primary"
             dark
@@ -15,7 +15,7 @@
           >
             Criar
           </v-btn>
-        </template>
+        </template> -->
         <v-card>
           <div v-if="isLoading" style="min-height: 4px;">
             <v-progress-linear
@@ -190,19 +190,37 @@
 
 export default {
   name: 'AddWallet',
+
+  props: {
+    value: {
+      type: Boolean,
+      default: false
+    }
+  },
+
   data () {
     return {
-      dialog: false,
       isLoading: false,
       wallet: '',
       fullname: ''
     }
   },
 
+  computed: {
+    dialog: {
+      get() {
+        return this.value
+      },
+      set(newValue) {
+        this.$emit('changeValueDialog', newValue)
+      }
+    }
+  },
+
   methods: {
     async generateWallet () {
       this.isLoading = true
-      
+
       try {
         const { data } = await this.$axios.post('/wallet')
         this.wallet = data.wallet
