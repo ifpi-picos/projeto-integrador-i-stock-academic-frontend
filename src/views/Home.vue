@@ -24,6 +24,7 @@
                     dark
                     large
                     color="#887725"
+                    @click="showDialog = !showDialog"
                     >
                     <v-icon aria-hidden="false">
                       mdi-plus
@@ -31,7 +32,7 @@
                     Carteira
                   </v-btn>
                 </v-hover>
-                <AddWallet/>
+                <AddWallet v-model="showDialog" @changeValueDialog="showDialog = $event" />
               </v-card-actions>
             </v-card>
           </v-hover>
@@ -80,6 +81,12 @@ import Alert from '@/components/Alert'
       AddWallet,
       Alert
     },
+
+    data() {
+      return {
+        showDialog: false
+      }
+    }
   }
 </script>
 

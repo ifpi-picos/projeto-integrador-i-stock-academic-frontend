@@ -13,7 +13,7 @@
 <script>
   import Navbar from '@/components/Navbar'
   import Footerbar from '@/components/Footerbar'
-  
+
   import Alert from '@/components/Alert'
 
   export default {
@@ -29,6 +29,12 @@
 
 <style scoped>
 .background {
-  background-color: #f1f0de !important; 
+  background-color: #f1f0de !important;
+}
+
+.fixed-bottom {
+  position: fixed !important;
+  bottom: 0 !important;
+  width: 100% !important;
 }
 </style>
