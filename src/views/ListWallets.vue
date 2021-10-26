@@ -3,8 +3,7 @@
     <v-container fluid>
       <v-row class="justify-center">
         <v-col cols="12" md="8">
-          <v-card elevation="6"
-            class="card-border">
+          <v-card elevation="6">
             <v-card-title
               class="justify-center mb-3 ">
               <h1 style="color: #887725">Lista de Carteiras</h1>
@@ -30,14 +29,14 @@
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="users.length > 0">
                   <tr
-                    v-for="item in desserts"
-                    :key="item.name"
+                    v-for="user in users"
+                    :key="user.id"
                   >
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.idwallets }}</td>
-                    <td>{{ item.idwallets }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.wallet ? user.wallet.wallet_code : '' }}</td>
+                    <td>{{ user.wallet ? user.wallet.balance : '' }}</td>
                     <td class="text-center">
                       <v-hover
                         v-slot="{ hover }">
@@ -102,52 +101,25 @@
   export default {
     data () {
       return {
-        desserts: [
-          {
-            name: 'Frozen Yogurt',
-            idwallets: 159,
-          },
-          {
-            name: 'Ice cream sandwich',
-            idwallets: 237,
-          },
-          {
-            name: 'Eclair',
-            idwallets: 262,
-          },
-          {
-            name: 'Cupcake',
-            idwallets: 305,
-          },
-          {
-            name: 'Gingerbread',
-            idwallets: 356,
-          },
-          {
-            name: 'Jelly bean',
-            idwallets: 375,
-          },
-          {
-            name: 'Lollipop',
-            idwallets: 392,
-          },
-          {
-            name: 'Honeycomb',
-            idwallets: 408,
-          },
-          {
-            name: 'Donut',
-            idwallets: 452,
-          },
-          {
-            name: 'KitKat',
-            idwallets: 518,
-          },
-        ],
+        users: []
       }
     },
 
+    mounted () {
+      this.getData ()
+    },
+
     methods: {
+      async getData () {
+        try {
+          const { data } = await this.$axios.get('/users')
+          this.users = data
+
+        } catch (err) {
+          console.error(err)
+        }
+      },
+
       setBalance (action) {
         this.$router.push('/balance')
         this.$store.dispatch('ADD_BALANCE', action)
@@ -172,5 +144,4 @@
 .btn-balance:hover {
   box-shadow: 0 8px 10px -5px rgba(0,0,0,.2),0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12)!important;
 }
-
 </style>

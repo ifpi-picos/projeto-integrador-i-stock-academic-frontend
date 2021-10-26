@@ -127,12 +127,12 @@
               <v-row v-if="wallet">
                 <v-col>
                   <span>
-                    O número da sua carteira é <code>{{ wallet }}</code>
+                    O número da sua carteira é:<br /><code class="pl-0">{{ wallet.wallet_code }}</code>
                   </span>
                 </v-col>
               </v-row>
 
-              <v-row v-if="wallet">
+              <v-row v-if="wallet.wallet_code">
                 <v-col>
                   <v-text-field
                     v-model="fullname"
@@ -200,19 +200,36 @@ export default {
   },
 
   methods: {
-    generateWallet () {
+    async generateWallet () {
       this.isLoading = true
       
-      setTimeout(() => {
+      try {
+        const { data } = await this.$axios.post('/wallet')
+        this.wallet = data.wallet
+
+      } catch (err) {
+        console.error(err)
+      } finally {
         this.isLoading = false
-        this.wallet = 'sdadasdsadas das da'
-      }, 5000)
+      }
+
+      /* setTimeout(() => {
+      }, 5000) */
     },
 
-    saveWallet () {
-      this.dialog = false
-      
-      this.$store.dispatch('CHANGE_ALERT', true)
+    async saveWallet () {
+      try {
+        const { data } = await this.$axios.post('/users', {name: this.fullname})
+        const userId = data.id
+
+        await this.$axios.patch('/wallet/bindUser', {user_id: userId, wallet_id: this.wallet.id})
+
+      } catch (err) {
+        console.error(err)
+      } finally {
+        this.dialog = false
+        this.$store.dispatch('CHANGE_ALERT', true)
+      }
 
       setTimeout(() => {
         this.$store.dispatch('CHANGE_ALERT', false)

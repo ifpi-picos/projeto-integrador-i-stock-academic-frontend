@@ -9,15 +9,15 @@
           elevation="0">
           <v-card-title style="color: #887725 " class="justify-center"><h1> Login </h1></v-card-title>
           <v-form
+            @submit.prevent="login()"
             class="mt-16"
             ref="form"
-            v-model="valid"
             lazy-validation
           >
             <v-col cols="8" class="mx-auto">
               <v-text-field
+                autocomplete="false"
                 v-model="email"
-                :rules="emailRules"
                 label="E-mail"
                 required>
                 <v-icon
@@ -33,7 +33,7 @@
                 :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="[rules.required, rules.min]"
                 :type="show ? 'text' : 'password'"
-                v-model="sigin"
+                v-model="password"
                 name="input-10-2"
                 label="Senha"
                 hint="At least 8 characters"
@@ -60,14 +60,12 @@
                   class="button"
                   v-slot="{ hover }">
                   <v-btn
+                    type="submit"
                     large
                     :elevation="hover ? 16 : 2"
                     :outlined="hover ? false : true"
                     block
-                    :disabled="!valid"
                     color="success"
-                    @click="validate"
-                    to="/home"
                   >
                     Entrar
                   </v-btn>
@@ -88,15 +86,32 @@ export default {
   data () {
     return {
       email: '',
-      sigin: '',
+      password: '',
       show: false,
-        rules: {
-          required: value => !!value || 'Required.',
-          min: v => v.length >= 8 || 'Min 8 characters',
-          emailMatch: () => (`The email and password you entered don't match`),
-        },
+      rules: {
+        required: value => !!value || 'Required.',
+        min: v => v.length >= 8 || 'Min 8 characters',
+        emailMatch: () => (`The email and password you entered don't match`),
+      },
     }
   },
+
+  methods: {
+    async login () {
+      try {
+        const resp = await this.$axios.post('/admin/auth', { email: this.email, password: this.  password })
+        
+        this.$storage.setItem(
+          "application-token",
+          resp.data.token
+        );
+
+        this.$router.push({name: 'Default'})
+      } catch (err) {
+        console.error(err)
+      }
+    }
+  }
 }
 </script>
 
