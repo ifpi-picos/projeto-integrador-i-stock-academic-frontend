@@ -25,7 +25,7 @@ const routes = [
       },
     ]
   },
-  
+
   {
     path: '/',
     name: 'Login',
@@ -45,18 +45,12 @@ const routes = [
   },
 
   {
-    path: '/balance',
-    name: 'Balance',
-    component: () => import('../components/Balance.vue')
-  },
-
-  {
     path: '*',
     name: '404',
     component: () => import('@/views/404.vue')
   },
 
-  
+
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -82,7 +76,7 @@ router.beforeEach((to, from, next) => {
         next({path: HOME})
       }
     } else {
-      if (to.path !== LOGIN) 
+      if (to.path !== LOGIN)
       next({path: LOGIN})
     }
     next()

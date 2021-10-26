@@ -22,7 +22,7 @@
 
       <v-app-bar-title>
         <router-link to="/home">
-          <v-img height="80" width="80" src="../../public/img/leaf.jpeg"></v-img>
+          <v-img height="80" width="80" class="rounded-circle" src="../../public/img/leaf.jpeg"></v-img>
         </router-link>
       </v-app-bar-title>
 
