@@ -21,7 +21,9 @@
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
       <v-app-bar-title>
-        <v-img height="80" width="80" src="../../public/img/leaf.jpeg"></v-img>
+        <router-link to="/home">
+          <v-img height="80" width="80" src="../../public/img/leaf.jpeg"></v-img>
+        </router-link>
       </v-app-bar-title>
 
       <v-spacer></v-spacer>

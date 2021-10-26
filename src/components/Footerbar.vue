@@ -1,6 +1,6 @@
 <template>
   <v-footer
-    absolute
+    :fixed="verifyRoute"
     dark
     padless
   >
@@ -29,7 +29,7 @@
       <v-divider></v-divider>
 
       <v-card-text class="white--text">
-        &copy CopyRights; {{ new Date().getFullYear() }} — <strong>Leaf</strong>
+        {{ verifyRoute }}&copy CopyRights; {{ new Date().getFullYear() }} — <strong>Leaf</strong>
       </v-card-text>
     </v-card>
   </v-footer>
@@ -44,7 +44,20 @@
         'mdi-linkedin',
         'mdi-instagram',
       ],
+      verifyRoute: undefined
     }),
+
+    computed: {
+      route() {
+        return this.$route.path
+      }
+    },
+
+    watch: {
+      route() {
+        this.route === '/home' ? this.verifyRoute = true : this.verifyRoute = false
+      }
+    }
   }
 </script>
 

@@ -22,7 +22,7 @@ const routes = [
         path: '/list-wallets',
         name: 'ListWallets',
         component: () => import('../views/ListWallets.vue')
-      }
+      },
     ]
   },
   
@@ -44,6 +44,18 @@ const routes = [
     component: () => import('../components/AddWallet.vue')
   },
 
+  {
+    path: '/balance',
+    name: 'Balance',
+    component: () => import('../components/Balance.vue')
+  },
+
+  {
+    path: '*',
+    name: '404',
+    component: () => import('@/views/404.vue')
+  },
+
   
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -51,10 +63,33 @@ const routes = [
     /* component: () => import( webpackChunkName: "about" '../views/About.vue') */
 ]
 
+
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  try {
+    const HOME = '/home'
+    const LOGIN = '/'
+
+    const token = localStorage.getItem('application-token')
+
+    if (token) {
+      if (to.path === LOGIN) {
+        next({path: HOME})
+      }
+    } else {
+      if (to.path !== LOGIN) 
+      next({path: LOGIN})
+    }
+    next()
+
+  } catch (error) {
+    console.error(error)
+  }
 })
 
 export default router
