@@ -1,3 +1,14 @@
 .theme--light.v-input, .theme--light.v-input input, .theme--light.v-input textarea {
   color: #5EBC64 !important;
 }
+
+::-webkit-scrollbar {
+  width: 3px;
+  /* display: none; */
+  background: #111!important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(94, 188, 100, 1);
+  border-radius: 1rem;
+}

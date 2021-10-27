@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     alert: false,
     actionBalance: false,
+    listWallets: []
   },
 
   mutations: {
@@ -16,6 +17,10 @@ export default new Vuex.Store({
 
     setBalance (state, payload) {
       state.actionBalance = payload
+    },
+
+    setListWallets (state, payload) {
+      state.listWallets = payload
     }
   },
 
@@ -27,6 +32,10 @@ export default new Vuex.Store({
     CHANGE_BALANCE (context, payload) {
       context.commit('setBalance', payload)
     },
+
+    CHANGE_LIST_WALLETS (context, payload) {
+      context.commit('setListWallets', payload)
+    }
   },
 
   getters: {
@@ -36,6 +45,10 @@ export default new Vuex.Store({
 
     actionBalance: (state) => {
       return state.actionBalance
+    },
+
+    listWallets: (state) => {
+      return state.listWallets
     }
   },
 
