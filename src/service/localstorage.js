@@ -14,7 +14,7 @@ const setItem = (key, value) => {
 
 const getItem = (key) => {
   if (keysAllowed.includes(key)) {
-   return localStorage.getItem(key);
+    return localStorage.getItem(key);
   } else {
     throw new Error(
       `Chave de local storage inválida. Permitida(s): ${keysAllowed}`
