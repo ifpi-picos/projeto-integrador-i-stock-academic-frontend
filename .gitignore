@@ -9,6 +9,11 @@ node_modules
 
 yarn.lock
 
+# firebase
+.firebaserc
+.firebase
+firebase.json
+
 # Log files
 npm-debug.log*
 yarn-debug.log*

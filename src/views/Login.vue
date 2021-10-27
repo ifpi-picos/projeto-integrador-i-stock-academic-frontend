@@ -48,7 +48,7 @@
               </v-text-field>
             </v-col>
 
-            <v-col cols="8" class="mx-auto text-right">
+            <v-col cols="8" class="mx-auto text-right" v-if="false">
               <router-link style="color: #887725" to="signup">
                 ou Cadastre-se
               </router-link>
@@ -100,7 +100,7 @@ export default {
     async login () {
       try {
         const resp = await this.$axios.post('/admin/auth', { email: this.email, password: this.  password })
-        
+
         this.$storage.setItem(
           "application-token",
           resp.data.token
