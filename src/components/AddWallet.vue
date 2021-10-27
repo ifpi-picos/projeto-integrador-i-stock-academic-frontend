@@ -159,7 +159,7 @@
                 :outlined="hover ? false : true"
                 color="success"
                 tile
-                :disabled="!fullname"
+                :disabled="!fullname || !wallet"
                 class="mr-4 justify-center"
                 @click="saveWallet()"
               >
@@ -243,6 +243,8 @@ export default {
 
         await this.$axios.patch('/wallet/bindUser', {user_id: userId, wallet_id: this.wallet.id})
 
+        this.wallet = ''
+        this.fullname = ''
       } catch (err) {
         console.error(err)
       } finally {
