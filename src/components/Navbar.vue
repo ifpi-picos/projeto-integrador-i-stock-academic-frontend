@@ -18,7 +18,7 @@
         ></v-img><!-- gradient="to top right, rgba(55,236,186,.7), rgba(25,32,72,.7)" -->
       </template>
 
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
 
       <v-app-bar-title>
         <router-link to="/home">
@@ -28,7 +28,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
+      <!-- <v-btn icon>
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
 
@@ -38,7 +38,13 @@
 
       <v-btn icon>
         <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
+      </v-btn> -->
+
+      <v-layout row wrap justify-end align-self-end>
+        <v-flex xs8 sm4 md3 lg2 mb-8>
+          <v-btn color="red lighten-1" @click="$axios.logout()">Logout</v-btn>
+        </v-flex>
+      </v-layout>
     </v-app-bar>
     <!-- <v-sheet
       id="scrolling-techniques-5"
