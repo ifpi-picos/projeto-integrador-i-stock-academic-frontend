@@ -1,15 +1,15 @@
 <template>
-  <v-card >
+  <v-card flat class="overflow-hidden">
     <v-app-bar
-      absolute
+      app
+      fixed
+      top
       color="#43a047"
       dark
-      shrink-on-scroll
       prominent
+      shrink-on-scroll
       src="https://picsum.photos/1920/1080?random"
       fade-img-on-scroll
-      scroll-target="#scrolling-techniques-5"
-      scroll-threshold="500"
     >
       <template v-slot:img="{ props }">
         <v-img
@@ -22,7 +22,7 @@
 
       <v-app-bar-title>
         <router-link to="/home">
-          <v-img height="80" width="80" class="rounded-circle" src="../../public/img/leaf.jpeg"></v-img>
+          <v-img max-width="80" class="rounded-circle" src="../../public/img/leaf.jpeg"></v-img>
         </router-link>
       </v-app-bar-title>
 

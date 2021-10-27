@@ -45,8 +45,8 @@ export default {
 <style scoped>
 .alert {
   position: absolute;
-  left: 7.2rem;
-  top: 7.5rem;
+  left: 7.5rem;
+  top: 0;
   z-index: 1;
 }
 </style>
