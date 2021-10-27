@@ -47,9 +47,9 @@
                                 color="#887725"
                                 class="mr-4 justify-center py-3 px-1"
                                 @click="
-                                  dataChangeBalance.wallet = user.wallet
-                                  dataChangeBalance.typeChange = 'add'
-                                  setBalance()
+                                  dataChangeBalance.wallet = user.wallet;
+                                  dataChangeBalance.typeChange = 'add';
+                                  setBalance();
                                 "
                               >
                                 <v-icon>mdi-plus</v-icon>
@@ -73,9 +73,9 @@
                                 color="error"
                                 class="mr-4 justify-center py-3 px-1"
                                 @click="
-                                  dataChangeBalance.wallet = user.wallet
-                                  dataChangeBalance.typeChange = 'remove'
-                                  setBalance()
+                                  dataChangeBalance.wallet = user.wallet;
+                                  dataChangeBalance.typeChange = 'remove';
+                                  setBalance();
                                 "
                               >
                                 <v-icon>mdi-minus</v-icon>
@@ -131,7 +131,17 @@ export default {
     async getData() {
       try {
         const { data } = await this.$axios.get("/users");
-        this.users = data;
+
+        this.users = data.sort((a, b) => {
+          if (!a.wallet) a.wallet = { balance: 0 }
+          if (!b.wallet) b.wallet = { balance: 0 }
+
+          return a.wallet.balance > b.wallet.balance
+            ? -1
+            : a.wallet.balance < b.wallet.balance
+            ? 1
+            : 0;
+        });
       } catch (err) {
         console.error(err);
       }

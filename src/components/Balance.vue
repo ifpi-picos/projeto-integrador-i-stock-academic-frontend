@@ -155,6 +155,7 @@ export default {
         });
 
         this.$emit("updateBalance");
+        this.dialog = false
       } catch (error) {
         console.error(error);
       }

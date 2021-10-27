@@ -159,6 +159,7 @@
                 :outlined="hover ? false : true"
                 color="success"
                 tile
+                :disabled="!fullname"
                 class="mr-4 justify-center"
                 @click="saveWallet()"
               >
