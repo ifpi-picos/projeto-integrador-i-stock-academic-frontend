@@ -131,6 +131,7 @@ export default {
     async getData() {
       try {
         const { data } = await this.$axios.get("/users");
+        this.$store.dispatch('CHANGE_LIST_WALLETS', data)
 
         this.users = data.sort((a, b) => {
           if (!a.wallet) a.wallet = { balance: 0 }

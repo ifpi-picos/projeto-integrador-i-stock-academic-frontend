@@ -1,11 +1,11 @@
 <template>
   <v-app class="background">
     <v-main>
-      <Navbar style="margin-bottom: 128px"></Navbar>
+      <Navbar></Navbar>
       <Alert />
       <router-view>
       </router-view>
-      <Footerbar class="fixed-bottom"></Footerbar>
+      <Footerbar></Footerbar>
     </v-main>
   </v-app>
 </template>
