@@ -10,7 +10,7 @@
           <div v-if="isLoading" style="min-height: 4px;">
             <v-progress-linear
               indeterminate
-              color="#5EBC64"
+              color="primary"
             ></v-progress-linear>
           </div>
           <v-card-title>
@@ -73,8 +73,9 @@
                       label="Nome Completo*"
                       placeholder="Informe seu nome"
                       required
+                      color="primary"
                     >
-                      <v-icon slot="prepend-inner" color="#5EBC64">
+                      <v-icon slot="prepend-inner" color="primary">
                         mdi-account-tie
                       </v-icon>
                     </v-text-field>
@@ -85,13 +86,24 @@
                   <v-col cols="12" md="6" class="py-0">
                     <v-text-field
                       v-model="user.cpfCnpj"
-                      label="CPF ou CNPJ"
-                      placeholder="Informe seu cpfCnpj"
+                      :error-messages="cpfCnpjErrors"
+                      label="CPF ou CNPJ*"
+                      placeholder="Informe seu Cpf/Cnpj"
                       prepend-inner-icon="mdi-card-account-details"
                       v-mask="['###.###.###-##', '##.###.###/####-##']"
                       required
-                      color="terciary"
-                    />
+                      color="primary"
+                      @change="$v.user.cpfCnpj.$touch()"
+                      @blur="$v.user.cpfCnpj.$touch()"
+
+                    >
+                      <v-icon v-if="user.validcpfCnpj === true" slot="append" color="primary">
+                        mdi-check-bold
+                      </v-icon>
+                      <v-icon v-if="user.validcpfCnpj === false" slot="append" color="error">
+                        mdi-close-thick
+                      </v-icon>
+                    </v-text-field>
                   </v-col>
 
                   <v-col cols="12" md="6" class="py-0">
@@ -100,9 +112,9 @@
                       label="Telefone*"
                       placeholder="Informe seu Telefone"
                       prepend-inner-icon="mdi-whatsapp"
-                      v-mask="'##-#####-####'"
+                      v-mask="'(##) #####-####'"
                       required
-                      color="terciary"
+                      color="primary"
                     />
                   </v-col>
                 </v-row>
@@ -116,7 +128,7 @@
                       prepend-inner-icon="mdi-mailbox"
                       v-mask="'#####-###'"
                       required
-                      color="terciary"
+                      color="primary"
                     />
                   </v-col>
                 </v-row>
@@ -128,7 +140,7 @@
                       label="Cidade"
                       placeholder="Informe sua cidade"
                       prepend-inner-icon="mdi-city"
-                      color="terciary"
+                      color="primary"
                     />
                   </v-col>
 
@@ -138,7 +150,7 @@
                       label="Estado"
                       placeholder="Informe seu estado"
                       prepend-inner-icon="mdi-billboard"
-                      color="terciary"
+                      color="primary"
                     />
                   </v-col>
                 </v-row>
@@ -150,7 +162,7 @@
                       label="Bairro"
                       placeholder="Informe o bairro"
                       prepend-inner-icon="mdi-home-group"
-                      color="terciary"
+                      color="primary"
                     />
                   </v-col>
 
@@ -160,7 +172,7 @@
                       label="Logradouro"
                       placeholder="Informe a descrição logradouro"
                       prepend-inner-icon="mdi-home-city-outline"
-                      color="terciary"
+                      color="primary"
                     />
                   </v-col>  
                 </v-row>
@@ -172,7 +184,7 @@
                       label="Complemento"
                       placeholder="Informe o complemento"
                       prepend-inner-icon="mdi-notebook-edit"
-                      color="terciary"
+                      color="primary"
                     />
                   </v-col>
 
@@ -182,7 +194,7 @@
                       label="Número"
                       placeholder="Informe o número da residência ou ap"
                       prepend-inner-icon="mdi-billboard"
-                      color="terciary"
+                      color="primary"
                     />
                   </v-col>
                 </v-row>
@@ -230,6 +242,12 @@
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate'
+
+import { required } from 'vuelidate/lib/validators'
+
+import { cpf } from 'cpf-cnpj-validator'
+import { cnpj } from 'cpf-cnpj-validator'
 
 export default {
   name: 'AddWallet',
@@ -241,6 +259,14 @@ export default {
     }
   },
 
+  mixins: [validationMixin],
+
+  validations: {
+    user: {
+      cpfCnpj: { required },
+    }
+  },
+
   data () {
     return {
       isLoading: false,
@@ -249,10 +275,11 @@ export default {
         userPhoto: undefined,
         fullname: '',
         cpfCnpj: '',
+        validcpfCnpj: '',
         phoneNumber: '',
         address: {
           CEP: '',
-          cyty: '',
+          city: '',
           state: '',
           district: '',
           publicPlace: '',
@@ -271,7 +298,20 @@ export default {
       set(newValue) {
         this.$emit('changeValueDialog', newValue)
       }
-    }
+    },
+
+    cpfCnpjErrors () {
+      const errors = []
+      if (!this.$v.user.cpfCnpj.$dirty) return errors
+      !this.user.validcpfCnpj && errors.push('O CPF/CNPJ informado não é válido.')
+      !this.$v.user.cpfCnpj.required && errors.push('O CPF é obrigatório.')
+      return errors
+    },
+  },
+
+  watch: {
+    'user.cpfCnpj': 'cpfCnpjValidate',
+    'user.address.CEP': 'getInfoCep',
   },
 
   methods: {
@@ -287,30 +327,67 @@ export default {
       } finally {
         this.isLoading = false
       }
+    },
 
-      /* setTimeout(() => {
-      }, 5000) */
+    cpfCnpjValidate () {
+      if (this.user.cpfCnpj.length === 14) {
+        this.user.validcpfCnpj = cpf.isValid(this.user.cpfCnpj)
+
+
+      } else if (this.user.cpfCnpj.length > 14 && this.user.cpfCnpj.length === 18) {
+        this.user.validcpfCnpj = cnpj.isValid(this.user.cpfCnpj)
+      }
+    },
+
+    async getInfoCep () {
+      this.clearAddress()
+
+      if (this.user.address.CEP.length === 9) {
+        let cep = this.user.address.CEP.replace(/[^0-9]/, '')
+
+        const { data } = await this.$axios2.get(`${cep}.json`)
+
+        const searchedCep = data
+
+        if (searchedCep?.status >= 200 && searchedCep?.status <= 207) {
+          this.user.address.city = searchedCep.city
+          this.user.address.state = searchedCep.state
+          this.user.address.publicPlace = searchedCep.address
+          this.user.address.district = searchedCep.district
+        }
+      }
+    },
+
+    clearAddress () {
+      this.user.address.city = ''
+      this.user.address.state = ''
+      this.user.address.publicPlace = ''
+      this.user.address.district = ''
     },
 
     async saveWallet () {
-      try {
-        const { data } = await this.$axios.post('/users', {name: this.user.fullname})
-        const userId = data.id
+      this.$v.$touch()
 
-        await this.$axios.patch('/wallet/bindUser', {user_id: userId, wallet_id: this.user.wallet.id})
+      if (!this.$v.$error) {
+        try {
+          const { data } = await this.$axios.post('/users', {name: this.user.fullname})
+          const userId = data.id
 
-        this.user.wallet = ''
-        this.user.fullname = ''
-      } catch (err) {
-        console.error(err)
-      } finally {
-        this.dialog = false
-        this.$store.dispatch('CHANGE_ALERT', true)
+          await this.$axios.patch('/wallet/bindUser', {user_id: userId, wallet_id: this.user.wallet.id})
+
+          this.user.wallet = ''
+          this.user.fullname = ''
+        } catch (err) {
+          console.error(err)
+        } finally {
+          this.dialog = false
+          this.$store.dispatch('CHANGE_ALERT', true)
+        }
+
+        setTimeout(() => {
+          this.$store.dispatch('CHANGE_ALERT', false)
+        }, 5000)
       }
-
-      setTimeout(() => {
-        this.$store.dispatch('CHANGE_ALERT', false)
-      }, 5000)
     }
   },
 }
