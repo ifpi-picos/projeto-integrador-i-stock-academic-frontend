@@ -75,12 +75,10 @@
                       placeholder="Informe seu nome"
                       required
                       color="primary"
+                      prepend-inner-icon="mdi-account-tie"
                       @change="$v.user.fullName.$touch()"
                       @blur="$v.user.fullName.$touch()"
                     >
-                      <v-icon slot="prepend-inner" color="primary">
-                        mdi-account-tie
-                      </v-icon>
                     </v-text-field>
                   </v-col>
                 </v-row>
