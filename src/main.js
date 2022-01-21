@@ -15,6 +15,11 @@ import './service/localstorage.js'
 import './assets/css/style.scss'
 Vue.config.productionTip = false
 
+// Import VueTheMask
+
+import VueTheMask from 'vue-the-mask'
+Vue.use(VueTheMask)
+
 new Vue({
   router,
   store,
