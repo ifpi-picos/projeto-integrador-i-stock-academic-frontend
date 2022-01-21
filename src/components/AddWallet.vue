@@ -69,11 +69,14 @@
 
                   <v-col cols="12" md="6" class="py-0">
                     <v-text-field
-                      v-model="user.fullname"
+                      v-model="user.fullName"
+                      :error-messages="fullNameErrors"
                       label="Nome Completo*"
                       placeholder="Informe seu nome"
                       required
                       color="primary"
+                      @change="$v.user.fullName.$touch()"
+                      @blur="$v.user.fullName.$touch()"
                     >
                       <v-icon slot="prepend-inner" color="primary">
                         mdi-account-tie
@@ -109,12 +112,15 @@
                   <v-col cols="12" md="6" class="py-0">
                     <v-text-field
                       v-model="user.phoneNumber"
+                      :error-messages="phoneNumberErrors"
                       label="Telefone*"
-                      placeholder="Informe seu Telefone"
+                      placeholder="(##) #####-####"
                       prepend-inner-icon="mdi-whatsapp"
                       v-mask="'(##) #####-####'"
                       required
                       color="primary"
+                      @change="$v.user.phoneNumber.$touch()"
+                      @blur="$v.user.phoneNumber.$touch()"
                     />
                   </v-col>
                 </v-row>
@@ -123,12 +129,15 @@
                   <v-col cols="12" sm="6" class="py-0">
                     <v-text-field
                       v-model="user.address.CEP"
+                      :error-messages="CepErrors"
                       label="CEP*"
                       placeholder="Informe seu CEP"
                       prepend-inner-icon="mdi-mailbox"
                       v-mask="'#####-###'"
                       required
                       color="primary"
+                      @change="$v.user.address.CEP.$touch()"
+                      @blur="$v.user.address.CEP.$touch()"
                     />
                   </v-col>
                 </v-row>
@@ -145,8 +154,9 @@
                   </v-col>
 
                   <v-col cols="12" md="6" class="py-0">
-                    <v-text-field
+                     <v-select
                       v-model="user.address.state"
+                      :items="statesList"
                       label="Estado"
                       placeholder="Informe seu estado"
                       prepend-inner-icon="mdi-billboard"
@@ -211,7 +221,7 @@
                     :outlined="hover ? false : true"
                     color="success"
                     tile
-                    :disabled="!user.fullname || !user.wallet"
+                    :disabled="!user.fullName || !user.wallet || !user.cpfCnpj || !user.phoneNumber || !user.address.CEP"
                     class="mr-4 justify-center"
                     @click="saveWallet()"
                   >
@@ -244,7 +254,7 @@
 <script>
 import { validationMixin } from 'vuelidate'
 
-import { required } from 'vuelidate/lib/validators'
+import { required, minLength } from 'vuelidate/lib/validators'
 
 import { cpf } from 'cpf-cnpj-validator'
 import { cnpj } from 'cpf-cnpj-validator'
@@ -263,7 +273,18 @@ export default {
 
   validations: {
     user: {
+      fullName: {
+        required,
+        minLength: minLength(10),
+      },
       cpfCnpj: { required },
+      phoneNumber: {
+        required,
+        minLength: minLength(15),
+      },
+      address: {
+        CEP: { required },
+      },
     }
   },
 
@@ -273,7 +294,6 @@ export default {
       user: {
         wallet: '',
         userPhoto: undefined,
-        fullname: '',
         cpfCnpj: '',
         validcpfCnpj: '',
         phoneNumber: '',
@@ -286,7 +306,36 @@ export default {
           number: null,
           complement: '',
         }
-      }
+      },
+      statesList: [
+        'AC',
+        'AL',
+        'AP',
+        'AM',
+        'BA',
+        'CE',
+        'DF',
+        'ES',
+        'GO',
+        'MA',
+        'MT',
+        'MS',
+        'MG',
+        'PA',
+        'PB',
+        'PR',
+        'PE',
+        'PI',
+        'RJ',
+        'RN',
+        'RS',
+        'RO',
+        'RR',
+        'SC',
+        'SP',
+        'SE',
+        'TO',
+      ],
     }
   },
 
@@ -305,6 +354,29 @@ export default {
       if (!this.$v.user.cpfCnpj.$dirty) return errors
       !this.user.validcpfCnpj && errors.push('O CPF/CNPJ informado não é válido.')
       !this.$v.user.cpfCnpj.required && errors.push('O CPF é obrigatório.')
+      return errors
+    },
+
+    fullNameErrors () {
+      const errors = []
+      if (!this.$v.user.fullName.$dirty) return errors
+      !this.$v.user.fullName.required && errors.push('O nome completo é obrigatório.')
+      !this.$v.user.fullName.minLength && errors.push('Infome ao menos 10 letras para o nome.')
+      return errors
+    },
+    
+    phoneNumberErrors () {
+      const errors = []
+      if (!this.$v.user.phoneNumber.$dirty) return errors
+      !this.$v.user.phoneNumber.required && errors.push('O Telefone é obrigatório.')
+      !this.$v.user.phoneNumber.minLength && errors.push('Infome ao menos 2 números para o código e 9 para o telefone.')
+      return errors
+    },
+
+    CepErrors () {
+      const errors = []
+      if (!this.$v.user.address.CEP.$dirty) return errors
+      !this.$v.user.address.CEP.required && errors.push('O CEP é obrigatório.')
       return errors
     },
   },
@@ -370,13 +442,13 @@ export default {
 
       if (!this.$v.$error) {
         try {
-          const { data } = await this.$axios.post('/users', {name: this.user.fullname})
+          const { data } = await this.$axios.post('/users', {name: this.user.fullName})
           const userId = data.id
 
           await this.$axios.patch('/wallet/bindUser', {user_id: userId, wallet_id: this.user.wallet.id})
 
           this.user.wallet = ''
-          this.user.fullname = ''
+          this.user.fullName = ''
         } catch (err) {
           console.error(err)
         } finally {
