@@ -86,7 +86,7 @@
                 </v-row>
 
                 <v-row>
-                  <v-col cols="12" md="6" class="py-0">
+                  <v-col cols="12" md="4" class="py-0">
                     <v-text-field
                       v-model="user.cpfCnpj"
                       :error-messages="cpfCnpjErrors"
@@ -100,16 +100,16 @@
                       @blur="$v.user.cpfCnpj.$touch()"
 
                     >
-                      <v-icon v-if="user.validcpfCnpj === true" slot="append" color="primary">
+                      <v-icon v-if="user.validcpfCnpj" slot="append" color="primary">
                         mdi-check-bold
                       </v-icon>
-                      <v-icon v-if="user.validcpfCnpj === false" slot="append" color="error">
+                      <v-icon v-else slot="append" color="error">
                         mdi-close-thick
                       </v-icon>
                     </v-text-field>
                   </v-col>
 
-                  <v-col cols="12" md="6" class="py-0">
+                  <v-col cols="12" md="4" class="py-0">
                     <v-text-field
                       v-model="user.phoneNumber"
                       :error-messages="phoneNumberErrors"
@@ -123,6 +123,18 @@
                       @blur="$v.user.phoneNumber.$touch()"
                     />
                   </v-col>
+
+                  <v-col cols="12" md="4" class="py-0">
+                    <v-select
+                      v-model="pixSelected"
+                      :items="pixList"
+                      label="Chave Pix"
+                      :disabled="!user.phoneNumber || !user.cpfCnpj || $v.user.phoneNumber.$error || cpfCnpjErrors.length > 0"
+                      placeholder="Selecione a sua chave pix"
+                      prepend-inner-icon="mdi-key-variant"
+                      color="primary"
+                    />
+                  </v-col>
                 </v-row>
 
                 <v-row justify="center">
@@ -131,7 +143,7 @@
                       v-model="user.address.CEP"
                       :error-messages="CepErrors"
                       label="CEP*"
-                      placeholder="Informe seu CEP"
+                      placeholder="Informe o seu CEP"
                       prepend-inner-icon="mdi-mailbox"
                       v-mask="'#####-###'"
                       required
@@ -158,7 +170,7 @@
                       v-model="user.address.state"
                       :items="statesList"
                       label="Estado"
-                      placeholder="Informe seu estado"
+                      placeholder="Selecione o seu estado"
                       prepend-inner-icon="mdi-billboard"
                       color="primary"
                     />
@@ -277,7 +289,10 @@ export default {
         required,
         minLength: minLength(10),
       },
-      cpfCnpj: { required },
+      cpfCnpj: {
+        required,
+        minLength: minLength(14)
+      },
       phoneNumber: {
         required,
         minLength: minLength(15),
@@ -297,6 +312,7 @@ export default {
         cpfCnpj: '',
         validcpfCnpj: '',
         phoneNumber: '',
+        pix: '',
         address: {
           CEP: '',
           city: '',
@@ -307,6 +323,11 @@ export default {
           complement: '',
         }
       },
+      pixSelected: '',
+      pixList: [
+        'Telefone',
+        'CPF/CNPJ',
+      ],
       statesList: [
         'AC',
         'AL',
@@ -354,6 +375,7 @@ export default {
       if (!this.$v.user.cpfCnpj.$dirty) return errors
       !this.user.validcpfCnpj && errors.push('O CPF/CNPJ informado não é válido.')
       !this.$v.user.cpfCnpj.required && errors.push('O CPF é obrigatório.')
+      !this.$v.user.cpfCnpj.minLength && errors.push('Infome ao menos 14 números.')
       return errors
     },
 
@@ -383,7 +405,9 @@ export default {
 
   watch: {
     'user.cpfCnpj': 'cpfCnpjValidate',
+    'user.phoneNumber': 'changePixKey',
     'user.address.CEP': 'getInfoCep',
+    pixSelected: 'verifyPixKey',
   },
 
   methods: {
@@ -402,7 +426,13 @@ export default {
     },
 
     cpfCnpjValidate () {
-      if (this.user.cpfCnpj.length === 14) {
+
+      this.changePixKey()
+
+      if (this.user.cpfCnpj.length < 14) {
+        this.user.validcpfCnpj = false
+
+      } else if (this.user.cpfCnpj.length === 14) {
         this.user.validcpfCnpj = cpf.isValid(this.user.cpfCnpj)
 
 
@@ -435,6 +465,19 @@ export default {
       this.user.address.state = ''
       this.user.address.publicPlace = ''
       this.user.address.district = ''
+    },
+
+    changePixKey () {
+      this.user.pix = ''
+      this.pixSelected = ''
+    },
+
+    verifyPixKey () {
+      if (this.pixSelected === 'Telefone') {
+        this.user.pix = this.user.phoneNumber
+      } else if (this.pixSelected === 'CPF/CNPJ') {
+        this.user.pix = this.user.cpfCnpj
+      }
     },
 
     async saveWallet () {
