@@ -6,6 +6,7 @@
       top
       color="#43a047"
       dark
+      tile
       prominent
       shrink-on-scroll
       src="https://picsum.photos/1920/1080?random"
