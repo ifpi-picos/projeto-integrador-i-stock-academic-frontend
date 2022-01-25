@@ -35,7 +35,7 @@
                         ? "Adicionando"
                         : "Removendo"
                     }}
-                    {{ deposit }} créditos na sua carteira
+                    {{ collect.deposit }} créditos na sua carteira <br>
                     <code>{{
                       dataChangeBalance.wallet
                         ? dataChangeBalance.wallet.wallet_code
@@ -45,28 +45,78 @@
                 </v-col>
               </v-row>
 
-              <v-row>
-                <v-col>
-                  <v-text-field
-                    v-model="deposit"
-                    :label="
-                      dataChangeBalance.typeChange === 'add'
-                        ? 'Valor de depósito'
-                        : 'Valor de retirada'
-                    "
-                    prefix="$"
-                    type="number"
-                    required
-                  >
-                    <v-icon slot="prepend-inner" color="#5EBC64">
-                      mdi-account-outline
-                    </v-icon>
-                  </v-text-field>
-                </v-col>
-                <v-col> </v-col>
-              </v-row>
+              <v-form onsubmit="">
+                <v-row>
+                  <v-col cols="12" class="py-0">
+                    <v-text-field
+                      v-model="employeeName"
+                      label="Nome do funcionário*"
+                      placeholder="Nome do funconário que está preenchendo"
+                      color="primary"
+                      prepend-inner-icon="mdi-account-outline"
+                      required
+                    />
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col cols="12" md="6" class="py-0">
+                    <v-select
+                      v-model="collect.material"
+                      :items="materialsList"
+                      label="Material*"
+                      color="primary"
+                      prepend-inner-icon="mdi-recycle"
+                      required
+                    />
+                  </v-col>
+
+                  <v-col cols="12" md="6" class="py-0">
+                    <v-text-field
+                      v-model="collect.kgPrice"
+                      label="Preço por Kg*"
+                      placeholder="Informe o preço do material"
+                      prepend-inner-icon="mdi-currency-brl"
+                      type="number"
+                      color="primary"
+                      required
+                    />
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col cols="12" md="6" class="py-0">
+                    <v-text-field
+                      v-model="collect.kgQuantity"
+                      label="Kg recolhidos*"
+                      placeholder="Informe a quantidade em Kg"
+                      prepend-inner-icon="mdi-weight-kilogram"
+                      type="number"
+                      color="primary"
+                      required
+                    />
+                  </v-col>
+
+                  <v-col cols="12" md="6" class="py-0">
+                    <v-text-field
+                      v-model="collect.deposit"
+                      :label="
+                        dataChangeBalance.typeChange === 'add'
+                          ? 'Valor de depósito'
+                          : 'Valor de retirada'
+                      "
+                      prepend-inner-icon="mdi-currency-brl"
+                      type="number"
+                      color="primary"
+                      :readonly="dataChangeBalance.typeChange === 'add'"
+                      required
+                    />
+                  </v-col>
+                </v-row>
+              </v-form>
             </v-container>
-            <!-- <small>*indicates required field</small> -->
+
+            <small>* Campos Obrigatórios</small>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -105,7 +155,7 @@
 
 <script>
 export default {
-  name: "AddWallet",
+  name: 'AddWallet',
 
   props: {
     value: {
@@ -135,19 +185,37 @@ export default {
   data() {
     return {
       isLoading: false,
-      deposit: 0,
+      
+      collect: {
+        employeeName: '',
+        material: '',
+        kgPrice: undefined,
+        kgQuantity: undefined,
+        deposit: 0,
+      },
+      materialsList: ['Ferro', 'Alumínio', 'Cobre', 'Pet', 'Leitoso', 'Papelão'],
+      
     };
   },
 
+  watch: {
+    'collect.kgPrice': 'calcDeposit',
+    'collect.kgQuantity': 'calcDeposit',
+  },
+
   methods: {
+    calcDeposit () {
+      this.collect.deposit = this.collect.kgPrice * this.collect.kgQuantity
+    },
+
     async saveWallet() {
       try {
         const newBalance =
           this.dataChangeBalance.typeChange === "add"
             ? Number(this.dataChangeBalance.wallet.balance) +
-              Number(this.deposit)
+              Number(this.collect.deposit)
             : Number(this.dataChangeBalance.wallet.balance) -
-              Number(this.deposit);
+              Number(this.collect.deposit);
 
         await this.$axios.post("/wallet/balance", {
           balance: newBalance,
