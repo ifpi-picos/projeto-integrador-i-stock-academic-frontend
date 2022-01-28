@@ -96,12 +96,11 @@
                       color="primary"
                       @change="$v.user.cpfCnpj.$touch()"
                       @blur="$v.user.cpfCnpj.$touch()"
-
-                    >
+                    > 
                       <v-icon v-if="user.validcpfCnpj" slot="append" color="primary">
                         mdi-check-bold
                       </v-icon>
-                      <v-icon v-else slot="append" color="error">
+                      <v-icon v-if="$v.user.cpfCnpj.$error || cpfCnpjErrors.length > 0" slot="append" color="error">
                         mdi-close-thick
                       </v-icon>
                     </v-text-field>
@@ -308,7 +307,7 @@ export default {
         wallet: '',
         userPhoto: undefined,
         cpfCnpj: '',
-        validcpfCnpj: '',
+        validcpfCnpj: undefined,
         phoneNumber: '',
         pix: '',
         address: {
@@ -371,9 +370,10 @@ export default {
     cpfCnpjErrors () {
       const errors = []
       if (!this.$v.user.cpfCnpj.$dirty) return errors
-      !this.user.validcpfCnpj && errors.push('O CPF/CNPJ informado não é válido.')
-      !this.$v.user.cpfCnpj.required && errors.push('O CPF é obrigatório.')
+      !this.user.validcpfCnpj && this.$v.user.cpfCnpj.required && errors.push('O CPF/CNPJ informado não é válido.')
+      !this.$v.user.cpfCnpj.required && errors.push('O CPF/CNPJ é obrigatório.')
       !this.$v.user.cpfCnpj.minLength && errors.push('Infome ao menos 14 números.')
+
       return errors
     },
 

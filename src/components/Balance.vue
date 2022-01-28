@@ -49,12 +49,15 @@
                 <v-row>
                   <v-col cols="12" class="py-0">
                     <v-text-field
-                      v-model="employeeName"
+                      v-model="collect.employeeName"
+                      :error-messages="employeeNameErrors"
                       label="Nome do funcionário*"
                       placeholder="Nome do funconário que está preenchendo"
                       color="primary"
                       prepend-inner-icon="mdi-account-outline"
                       required
+                      @change="$v.collect.employeeName.$touch()"
+                      @blur="$v.collect.employeeName.$touch()"
                     />
                   </v-col>
                 </v-row>
@@ -63,23 +66,29 @@
                   <v-col cols="12" md="6" class="py-0">
                     <v-select
                       v-model="collect.material"
+                      :error-messages="materialErrors"
                       :items="materialsList"
                       label="Material*"
                       color="primary"
                       prepend-inner-icon="mdi-recycle"
                       required
+                      @change="$v.collect.material.$touch()"
+                      @blur="$v.collect.material.$touch()"
                     />
                   </v-col>
 
                   <v-col cols="12" md="6" class="py-0">
                     <v-text-field
                       v-model="collect.kgPrice"
+                      :error-messages="kgPriceErrors"
                       label="Preço por Kg*"
                       placeholder="Informe o preço do material"
                       prepend-inner-icon="mdi-currency-brl"
                       type="number"
                       color="primary"
                       required
+                      @change="$v.collect.kgPrice.$touch()"
+                      @blur="$v.collect.kgPrice.$touch()"
                     />
                   </v-col>
                 </v-row>
@@ -88,12 +97,15 @@
                   <v-col cols="12" md="6" class="py-0">
                     <v-text-field
                       v-model="collect.kgQuantity"
+                      :error-messages="kgQuantityErrors"
                       label="Kg recolhidos*"
                       placeholder="Informe a quantidade em Kg"
                       prepend-inner-icon="mdi-weight-kilogram"
                       type="number"
                       color="primary"
                       required
+                      @change="$v.collect.kgQuantity.$touch()"
+                      @blur="$v.collect.kgQuantity.$touch()"
                     />
                   </v-col>
 
@@ -128,7 +140,8 @@
                 color="success"
                 tile
                 class="mr-4 justify-center"
-                @click.native="saveWallet()"
+                :disabled="$v.collect.$error"
+                @click.native="saveTransation()"
               >
                 Salvar
               </v-btn>
@@ -154,6 +167,10 @@
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate'
+
+import { required, minLength } from 'vuelidate/lib/validators'
+
 export default {
   name: 'AddWallet',
 
@@ -166,23 +183,26 @@ export default {
       type: Object,
       default: {
         wallet: {},
-        typeChange: "",
+        typeChange: '',
       },
     },
   },
 
-  computed: {
-    dialog: {
-      get() {
-        return this.value;
+  mixins: [validationMixin],
+
+  validations: {
+    collect: {
+      employeeName: {
+        required,
+        minLength: minLength(10),
       },
-      set(newValue) {
-        this.$emit("changeValue", newValue);
-      },
-    },
+      material: { required },
+      kgPrice: { required },
+      kgQuantity: { required },
+    }
   },
 
-  data() {
+  data () {
     return {
       isLoading: false,
       
@@ -198,6 +218,46 @@ export default {
     };
   },
 
+  computed: {
+    dialog: {
+      get() {
+        return this.value;
+      },
+      set(newValue) {
+        this.$emit("changeValue", newValue)
+      },
+    },
+
+    employeeNameErrors () {
+      const errors = []
+      if (!this.$v.collect.employeeName.$dirty) return errors
+      !this.$v.collect.employeeName.required && errors.push('O nome completo é obrigatório.')
+      !this.$v.collect.employeeName.minLength && errors.push('Infome ao menos 10 letras para o nome.')
+      return errors
+    },
+
+    materialErrors () {
+      const errors = []
+      if (!this.$v.collect.material.$dirty) return errors
+      !this.$v.collect.material.required && errors.push('O material é obrigatório.')
+      return errors
+    },
+    
+    kgPriceErrors () {
+      const errors = []
+      if (!this.$v.collect.kgPrice.$dirty) return errors
+      !this.$v.collect.kgPrice.required && errors.push('O Preço por quilo é obrigatório.')
+      return errors
+    },
+
+    kgQuantityErrors () {
+      const errors = []
+      if (!this.$v.collect.kgQuantity.$dirty) return errors
+      !this.$v.collect.kgQuantity.required && errors.push('A quantidade de quilos é obrigatório.')
+      return errors
+    }
+  },
+
   watch: {
     'collect.kgPrice': 'calcDeposit',
     'collect.kgQuantity': 'calcDeposit',
@@ -208,24 +268,28 @@ export default {
       this.collect.deposit = this.collect.kgPrice * this.collect.kgQuantity
     },
 
-    async saveWallet() {
-      try {
-        const newBalance =
-          this.dataChangeBalance.typeChange === "add"
-            ? Number(this.dataChangeBalance.wallet.balance) +
-              Number(this.collect.deposit)
-            : Number(this.dataChangeBalance.wallet.balance) -
-              Number(this.collect.deposit);
+    async saveTransation () {
+      this.$v.$touch()
 
-        await this.$axios.post("/wallet/balance", {
-          balance: newBalance,
-          walletId: this.dataChangeBalance.wallet.id,
-        });
+      if (!this.$v.$error) {
+        try {
+          const newBalance =
+            this.dataChangeBalance.typeChange === 'add'
+              ? Number(this.dataChangeBalance.wallet.balance) +
+                Number(this.collect.deposit)
+              : Number(this.dataChangeBalance.wallet.balance) -
+                Number(this.collect.deposit);
 
-        this.$emit("updateBalance");
-        this.dialog = false
-      } catch (error) {
-        console.error(error);
+          await this.$axios.post('/wallet/balance', {
+            balance: newBalance,
+            walletId: this.dataChangeBalance.wallet.id,
+          })
+
+          this.$emit('updateBalance')
+          this.dialog = false
+        } catch (err) {
+          console.error(err)
+        }
       }
     },
   },
