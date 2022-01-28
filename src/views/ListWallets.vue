@@ -95,21 +95,21 @@
         </v-row>
       </v-container>
     </v-layout>
-    <Balance
+    <Transactions
       v-model="modalChangeWalletBalance"
       :dataChangeBalance="dataChangeBalance"
       @changeValue="modalChangeWalletBalance = $event"
-      @updateBalance="getData()"
+      @update="getData()"
     />
   </div>
 </template>
 
 <script>
-import Balance from "@/components/Balance.vue";
+import Transactions from "@/components/Transactions.vue";
 
 export default {
   components: {
-    Balance,
+    Transactions,
   },
 
   data() {
