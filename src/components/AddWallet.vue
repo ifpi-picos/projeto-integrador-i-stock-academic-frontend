@@ -232,7 +232,7 @@
                     tile
                     :disabled="!user.fullName || !user.wallet || !user.cpfCnpj || !user.phoneNumber || !user.address.CEP"
                     class="mr-4 justify-center"
-                    @click="saveWallet()"
+                    @click="saveUser()"
                   >
                     Salvar
                   </v-btn>
@@ -304,7 +304,8 @@ export default {
     return {
       isLoading: false,
       user: {
-        wallet: '',
+        fullName: '',
+        wallet: {},
         userPhoto: undefined,
         cpfCnpj: '',
         validcpfCnpj: undefined,
@@ -413,8 +414,8 @@ export default {
       this.isLoading = true
 
       try {
-        const { data } = await this.$axios.post('/wallet')
-        this.user.wallet = data.wallet
+        const { data: { data } } = await this.$axios.post('/wallet')
+        this.user.wallet = data
 
       } catch (err) {
         console.error(err)
@@ -478,18 +479,25 @@ export default {
       }
     },
 
-    async saveWallet () {
+    async saveUser () {
       this.$v.$touch()
 
       if (!this.$v.$error) {
         try {
-          const { data } = await this.$axios.post('/users', {name: this.user.fullName})
-          const userId = data.id
-
-          await this.$axios.patch('/wallet/bindUser', {user_id: userId, wallet_id: this.user.wallet.id})
+          const res = await this.$axios.post('/users', {
+            "name": this.user.fullName,
+            "nickname": "Beowolf",
+            "phone": this.user.phoneNumber,
+            "type_key_pix": this.user.pixSelected,
+            "key_pix": this.user.pix,
+            "cpf_or_cnpj": this.user.cpfCnpj,
+            "wallet_id": this.user.wallet.id,
+          })
 
           this.user.wallet = ''
           this.user.fullName = ''
+
+          this.clearAddress()
         } catch (err) {
           console.error(err)
         } finally {

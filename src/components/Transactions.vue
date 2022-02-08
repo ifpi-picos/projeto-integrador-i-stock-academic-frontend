@@ -270,19 +270,17 @@ export default {
 
     async saveTransation () {
       this.$v.$touch()
-
       if (!this.$v.$error) {
         try {
-          const newBalance =
-            this.dataChangeBalance.typeChange === 'add'
-              ? Number(this.dataChangeBalance.wallet.balance) +
-                Number(this.collect.deposit)
-              : Number(this.dataChangeBalance.wallet.balance) -
-                Number(this.collect.deposit);
 
-          await this.$axios.post('/wallet/balance', {
-            balance: newBalance,
-            walletId: this.dataChangeBalance.wallet.id,
+          await this.$axios.post('/transations', {
+            type_operation: this.dataChangeBalance.typeChange,
+            wallet_id: this.dataChangeBalance.wallet.id,
+            total_value: this.collect.deposit,
+            responsible_id: this.collect.employeeName,
+            kgs: this.collect.kgQuantity,
+            price_kg: this.collect.kgPrice,
+            type_material: this.collect.material,
           })
 
           this.$emit('updateBalance')

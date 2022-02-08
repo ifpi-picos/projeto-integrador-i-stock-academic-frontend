@@ -29,7 +29,7 @@
       <v-divider></v-divider>
 
       <v-card-text class="white--text">
-        &copy CopyRights; {{ new Date().getFullYear() }} — <strong>Leaf</strong>
+        &copy; CopyRights; {{ new Date().getFullYear() }} — <strong>Leaf</strong>
       </v-card-text>
     </v-card>
   </v-footer>
@@ -52,26 +52,26 @@
         return this.$route.path
       },
 
-      listWallets () {
+      /* listWallets () {
         return this.$store.getters('listWallets')
-      }
+      } */
     },
 
     watch: {
-      route() {
+      /* route() {
         this.verifyListWallets()
       },
 
       listWallets() {
         this.verifyListWallets()
-      }
+      } */
     },
 
-    methods: {
+    /* methods: {
       verifyListWallets() {
         this.route === '/home' ? this.verifyRoute = true : this.verifyRoute = false
       }
-    }
+    } */
   }
 </script>
 

@@ -9,7 +9,7 @@
           elevation="0">
           <v-card-title style="color: #887725 " class="justify-center"><h1> Login </h1></v-card-title>
           <v-form
-            @submit.prevent="login()"
+            @submit.stop.prevent="login()"
             class="mt-16"
             ref="form"
             lazy-validation
@@ -99,16 +99,16 @@ export default {
   methods: {
     async login () {
       try {
-        const resp = await this.$axios.post('/admin/auth', { email: this.email, password: this.  password })
+        const { data: { data } } = await this.$axios.post('/admin/auth', { email: this.email, password: this.  password })
 
         this.$storage.setItem(
           "application-token",
-          resp.data.token
+          data.token
         );
 
         this.$router.push({name: 'Default'})
       } catch (err) {
-        console.error(err)
+        console.error(err.data.data.message)
       }
     }
   }

@@ -29,6 +29,7 @@
                   </thead>
                   <tbody v-if="users.length > 0">
                     <tr v-for="user in users" :key="user.id">
+                      {{user}}
                       <td>{{ user.name }}</td>
                       <td>{{ user.wallet ? user.wallet.wallet_code : "" }}</td>
                       <td>{{ user.wallet ? user.wallet.balance : "" }}</td>
@@ -48,7 +49,7 @@
                                 class="mr-4 justify-center py-3 px-1"
                                 @click="
                                   dataChangeBalance.wallet = user.wallet;
-                                  dataChangeBalance.typeChange = 'add';
+                                  dataChangeBalance.typeChange = 'deposit';
                                   setBalance();
                                 "
                               >
@@ -74,7 +75,7 @@
                                 class="mr-4 justify-center py-3 px-1"
                                 @click="
                                   dataChangeBalance.wallet = user.wallet;
-                                  dataChangeBalance.typeChange = 'remove';
+                                  dataChangeBalance.typeChange = 'withdraw';
                                   setBalance();
                                 "
                               >
@@ -130,10 +131,12 @@ export default {
   methods: {
     async getData() {
       try {
-        const { data } = await this.$axios.get("/users");
+        const { data: { data } } = await this.$axios.get("/users");
         this.$store.dispatch('CHANGE_LIST_WALLETS', data)
 
         this.users = data.sort((a, b) => {
+          console.log(a)
+
           if (!a.wallet) a.wallet = { balance: 0 }
           if (!b.wallet) b.wallet = { balance: 0 }
 
