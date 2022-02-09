@@ -18,7 +18,7 @@
           </v-card-title>
           <v-card-text>
             <v-row>
-              <v-col >
+              <v-col cols="12" md="6">
                 <v-hover v-slot="{ hover }">
                   <v-btn
                     :elevation="hover ? 12 : 0"
@@ -44,11 +44,21 @@
                     Gerar nova carteira
                   </v-btn>
                 </v-hover>
-              </v-col>
+              </v-col> 
             </v-row>
 
-            <v-row v-if="user.wallet">
-              <v-col>
+            <v-row v-if="user.wallet" align="center">
+              <v-col cols="12" md="3">
+                <v-img
+                  v-if="user.userPhoto"
+                  :src="user.userPhoto"
+                  max-width="70"
+                  class="ml-2 rounded-pill elevation-10"
+                />
+                <v-icon size="60" v-else>mdi-account-tie</v-icon>
+              </v-col>
+
+              <v-col cols="12" md="9">
                 <span>
                   O número da sua carteira é:<br /><code class="pl-0">{{ user.wallet.wallet_code }}</code>
                 </span>
@@ -63,7 +73,7 @@
                       label="Foto do usuário"
                       accept="image/png, image/jpeg, image/bmp, image/jpg"
                       prepend-inner-icon="mdi-camera"
-                      v-model="user.userPhoto"
+                      @change="uploadPhoto($event)"
                     />
                   </v-col>
 
@@ -300,8 +310,7 @@ export default {
     }
   },
 
-  data () {
-    return {
+  data: () => ({
       isLoading: false,
       user: {
         fullName: '',
@@ -355,8 +364,7 @@ export default {
         'SE',
         'TO',
       ],
-    }
-  },
+  }),
 
   computed: {
     dialog: {
@@ -479,6 +487,27 @@ export default {
       }
     },
 
+    async uploadPhoto (image) {
+
+      if (!image) {
+        return
+      }
+
+      try {
+        const formData = new FormData()
+
+        formData.append('file', image)
+
+        const { data: { data } } = await this.$axios.post('/file-upload', formData, {
+          "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+        })
+
+        this.user.userPhoto = data.urlFile
+      } catch (err) {
+        console.error(err)
+      }
+    },
+
     async saveUser () {
       this.$v.$touch()
 
@@ -498,6 +527,7 @@ export default {
           this.user.fullName = ''
 
           this.clearAddress()
+          
         } catch (err) {
           console.error(err)
         } finally {
