@@ -29,10 +29,9 @@
                   </thead>
                   <tbody v-if="users.length > 0">
                     <tr v-for="user in users" :key="user.id">
-                      {{user}}
                       <td>{{ user.name }}</td>
                       <td>{{ user.wallet ? user.wallet.wallet_code : "" }}</td>
-                      <td>{{ user.wallet ? user.wallet.balance : "" }}</td>
+                      <td>{{ getBalance(user.wallet.wallet_transactions) }}</td>
                       <td class="text-center">
                         <v-hover v-slot="{ hover }">
                           <v-tooltip top color="#887725">
@@ -48,9 +47,9 @@
                                 color="#887725"
                                 class="mr-4 justify-center py-3 px-1"
                                 @click="
-                                  dataChangeBalance.wallet = user.wallet;
-                                  dataChangeBalance.typeChange = 'deposit';
-                                  setBalance();
+                                  dataChangeBalance.wallet = user.wallet
+                                  dataChangeBalance.typeChange = 'deposit'
+                                  setBalance()
                                 "
                               >
                                 <v-icon>mdi-plus</v-icon>
@@ -74,9 +73,9 @@
                                 color="error"
                                 class="mr-4 justify-center py-3 px-1"
                                 @click="
-                                  dataChangeBalance.wallet = user.wallet;
-                                  dataChangeBalance.typeChange = 'withdraw';
-                                  setBalance();
+                                  dataChangeBalance.wallet = user.wallet
+                                  dataChangeBalance.typeChange = 'withdraw'
+                                  setBalance()
                                 "
                               >
                                 <v-icon>mdi-minus</v-icon>
@@ -131,10 +130,10 @@ export default {
   methods: {
     async getData() {
       try {
-        const { data: { data } } = await this.$axios.get("/users");
+        const { data: { data } } = await this.$axios.get("/users")
         this.$store.dispatch('CHANGE_LIST_WALLETS', data)
 
-        this.users = data.sort((a, b) => {
+        this.users = data/* .sort((a, b) => {
           console.log(a)
 
           if (!a.wallet) a.wallet = { balance: 0 }
@@ -145,14 +144,35 @@ export default {
             : a.wallet.balance < b.wallet.balance
             ? 1
             : 0;
-        });
+        }); */
       } catch (err) {
-        console.error(err);
+        console.error(err)
       }
     },
 
+    getBalance (transactions) {
+      let balance = 0
+
+      if (transactions.length === 0) {
+        return
+      }
+
+      for (const transact in transactions) {
+        console.log('123', transact)
+        /* transact.type_operation === 'deposit' ?
+          balance -= + transact.total_value : balance += + transact.total_value
+        console.log(balance) */
+      }
+
+      return balance
+
+      /* eturn transact.filter(balance => balance {
+
+      }) */
+    },
+
     setBalance() {
-      this.modalChangeWalletBalance = !this.modalChangeWalletBalance;
+      this.modalChangeWalletBalance = !this.modalChangeWalletBalance
     },
   },
 };

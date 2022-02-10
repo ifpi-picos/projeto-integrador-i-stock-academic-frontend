@@ -326,7 +326,7 @@ export default {
           state: '',
           district: '',
           publicPlace: '',
-          number: null,
+          number: '',
           complement: '',
         }
       },
@@ -513,7 +513,7 @@ export default {
 
       if (!this.$v.$error) {
         try {
-          const res = await this.$axios.post('/users', {
+          const { data: { data } }= await this.$axios.post('/users', {
             "name": this.user.fullName,
             "nickname": "Beowolf",
             "phone": this.user.phoneNumber,
@@ -521,6 +521,17 @@ export default {
             "key_pix": this.user.pix,
             "cpf_or_cnpj": this.user.cpfCnpj,
             "wallet_id": this.user.wallet.id,
+          })
+
+          const address = await this.$axios.post('/address', {
+            zip_code: this.user.address.CEP,
+            state: this.user.address.state,
+            city: this.user.address.city,
+            district: this.user.address.district,
+            public_place: this.user.address.publicPlace,
+            complement: this.user.address.complement,
+            number: this.user.address.number,
+            user_id: data.id
           })
 
           this.user.wallet = ''

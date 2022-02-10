@@ -20,7 +20,7 @@
             ></v-progress-linear>
           </div>
           <v-card-title>
-            <span v-if="dataChangeBalance.typeChange === 'add'" class="text-h5"
+            <span v-if="dataChangeBalance.typeChange === 'deposit'" class="text-h5"
               >Adicionar Saldo</span
             >
             <span v-else class="text-h5">Retirar Saldo</span>
@@ -31,7 +31,7 @@
                 <v-col>
                   <span>
                     {{
-                      dataChangeBalance.typeChange === "add"
+                      dataChangeBalance.typeChange === "deposit"
                         ? "Adicionando"
                         : "Removendo"
                     }}
@@ -113,14 +113,14 @@
                     <v-text-field
                       v-model="collect.deposit"
                       :label="
-                        dataChangeBalance.typeChange === 'add'
+                        dataChangeBalance.typeChange === 'deposit'
                           ? 'Valor de depósito'
                           : 'Valor de retirada'
                       "
                       prepend-inner-icon="mdi-currency-brl"
                       type="number"
                       color="primary"
-                      :readonly="dataChangeBalance.typeChange === 'add'"
+                      :readonly="dataChangeBalance.typeChange === 'deposit'"
                       required
                     />
                   </v-col>
@@ -272,12 +272,11 @@ export default {
       this.$v.$touch()
       if (!this.$v.$error) {
         try {
-
-          await this.$axios.post('/transations', {
+          await this.$axios.post('/transactions', {
             type_operation: this.dataChangeBalance.typeChange,
             wallet_id: this.dataChangeBalance.wallet.id,
             total_value: this.collect.deposit,
-            responsible_id: this.collect.employeeName,
+            responsible: this.collect.employeeName,
             kgs: this.collect.kgQuantity,
             price_kg: this.collect.kgPrice,
             type_material: this.collect.material,
