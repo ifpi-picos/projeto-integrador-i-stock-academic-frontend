@@ -221,10 +221,10 @@ export default {
   computed: {
     dialog: {
       get() {
-        return this.value;
+        return this.value
       },
       set(newValue) {
-        this.$emit("changeValue", newValue)
+        this.$emit('changeValue', newValue)
       },
     },
 
