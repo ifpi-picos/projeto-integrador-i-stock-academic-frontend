@@ -52,7 +52,8 @@
                 <v-img
                   v-if="user.userPhoto"
                   :src="user.userPhoto"
-                  max-width="70"
+                  width="70"
+                  height="70"
                   class="ml-2 rounded-pill elevation-10"
                 />
                 <v-icon size="60" v-else>mdi-account-tie</v-icon>
@@ -196,10 +197,11 @@
                   </v-col>
 
                   <v-col cols="12" md="6" class="py-0">
-                    <v-text-field
+                    <v-select
                       v-model="user.address.publicPlace"
+                      :items="publicPlaces"
                       label="Logradouro"
-                      placeholder="Informe a descrição logradouro"
+                      placeholder="Selecione o logradouro"
                       prepend-inner-icon="mdi-home-city-outline"
                       color="primary"
                     />
@@ -332,8 +334,10 @@ export default {
       },
       pixSelected: '',
       pixList: [
-        'Telefone',
-        'CPF/CNPJ',
+        { text: 'Telefone', value: 'phone' },
+        { text: 'CPF/CNPJ', value: 'cpf/cnpj' },
+        { text: 'Email', value: 'email', disabled: true },
+        { text: 'Aleatória', value: 'random', disabled: true },
       ],
       statesList: [
         'AC',
@@ -364,6 +368,50 @@ export default {
         'SE',
         'TO',
       ],
+      publicPlaces: [
+        'Aeroporto',
+        'Alameda',
+        'Área',
+        'Avenida',
+        'Campo',
+        'Chácara',
+        'Colônia',
+        'Condomínio',
+        'Conjunto',
+        'Distrito',
+        'Esplanada',
+        'Estação',
+        'Estrada',
+        'Favela',
+        'Fazenda',
+        'Feira',
+        'Jardim',
+        'Ladeira',
+        'Lago',
+        'Lagoa',
+        'Largo',
+        'Loteamento',
+        'Morro',
+        'Núcleo',
+        'Parque',
+        'Passarela',
+        'Pátio',
+        'Praça',
+        'Quadra',
+        'Recanto',
+        'Residencial',
+        'Rodovia',
+        'Rua',
+        'Setor',
+        'Sítio',
+        'Travessa',
+        'Vale',
+        'Vereda',
+        'Via',
+        'Viaduto',
+        'Viela',
+        'Vila',
+      ]
   }),
 
   computed: {
@@ -480,9 +528,9 @@ export default {
     },
 
     verifyPixKey () {
-      if (this.pixSelected === 'Telefone') {
+      if (this.pixSelected === 'phone') {
         this.user.pix = this.user.phoneNumber
-      } else if (this.pixSelected === 'CPF/CNPJ') {
+      } else if (this.pixSelected === 'cpf/cnpj') {
         this.user.pix = this.user.cpfCnpj
       }
     },
@@ -514,16 +562,17 @@ export default {
       if (!this.$v.$error) {
         try {
           const { data: { data } }= await this.$axios.post('/users', {
-            "name": this.user.fullName,
-            "nickname": "Beowolf",
-            "phone": this.user.phoneNumber,
-            "type_key_pix": this.user.pixSelected,
-            "key_pix": this.user.pix,
-            "cpf_or_cnpj": this.user.cpfCnpj,
-            "wallet_id": this.user.wallet.id,
+            name: this.user.fullName,
+            nickname: "Beowolf",
+            user_photo: this.user.userPhoto,
+            phone: this.user.phoneNumber,
+            type_key_pix: this.pixSelected,
+            key_pix: this.user.pix,
+            cpf_or_cnpj: this.user.cpfCnpj,
+            wallet_id: this.user.wallet.id,
           })
 
-          const address = await this.$axios.post('/address', {
+          await this.$axios.post('/address', {
             zip_code: this.user.address.CEP,
             state: this.user.address.state,
             city: this.user.address.city,

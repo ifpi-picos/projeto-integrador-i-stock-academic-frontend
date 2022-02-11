@@ -43,8 +43,8 @@
                               outlined
                               :class="hover ? 'change-btn-color' : ''"
                               dark
-                              color="#887725"
-                              class="justify-center py-3 px-1"
+                              color="primary"
+                              class="justify-center py-3 pr-1 pl-0"
                               @click="
                                 dataChangeBalance.wallet = user.wallet
                                 dataChangeBalance.typeChange = 'deposit'
@@ -70,7 +70,7 @@
                               :outlined="hover ? false : true"
                               dark
                               color="error"
-                              class="mx-2 justify-center py-3 px-1"
+                              class="mx-2 justify-center py-3 pr-1 pl-0"
                               @click="
                                 dataChangeBalance.wallet = user.wallet
                                 dataChangeBalance.typeChange = 'withdraw'
@@ -100,7 +100,7 @@
                                 userInfo = user
                                 moreInfo = !moreInfo"
                             >
-                              <v-icon color="info" size="30" >mdi-information-outline</v-icon>
+                              <v-icon color="secondary" size="30" >mdi-information-outline</v-icon>
                             </v-btn>
                           </template>
                           <span>Mais informações</span>
@@ -116,13 +116,11 @@
       </v-row>
     </v-container>
 
-    <InfoModal :showInfo="moreInfo" :userInfo="userInfo"/>
-    <!-- <InfoModal v-model="moreInfo" :userInfo="userInfo" @changeStateModal="moreInfo = $event" /> -->
+    <InfoModal :openInfo.sync="moreInfo" :userInfo="userInfo" />
 
     <Transactions
-      v-model="modalChangeWalletBalance"
+      :value.sync="modalChangeWalletBalance"
       :dataChangeBalance="dataChangeBalance"
-      @changeValue="modalChangeWalletBalance = $event"
       @updateBalance="getData()"
     />
   </div>
@@ -152,7 +150,7 @@ export default {
   },
 
   mounted() {
-    this.getData();
+    this.getData()
   },
 
   methods: {

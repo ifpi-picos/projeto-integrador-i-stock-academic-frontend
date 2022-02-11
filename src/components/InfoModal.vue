@@ -25,7 +25,18 @@
                   </v-col>
                 </v-row>
 
-                <v-divider class="my-1"></v-divider>
+                <v-divider class="my-2"></v-divider>
+
+                <v-row align="center" justify="center">
+                  <v-col cols="12" md="6" class="pb-0">
+                    <v-img
+                      :src="userInfo.user_photo"
+                      width="70px"
+                      height="70px"
+                      class=" rounded-pill elevation-10 mx-auto"
+                    />
+                  </v-col>
+                </v-row>
 
                 <v-row>
                   <v-col cols="12" md="6">
@@ -44,7 +55,7 @@
                 </v-row>
 
                 <v-row>
-                  <v-col cols="12" md="6">
+                  <v-col cols="12" md="5">
                     <span class="text-h6 ">
                       <span class="color">Celular:</span>
                       {{ userInfo.phone }}
@@ -58,7 +69,7 @@
                     </span>
                   </v-col>
 
-                  <v-col cols="12" md="3">
+                  <v-col cols="12" md="4">
                     <span class="text-h6 ">
                       <span class="color">Pix:</span>
                       {{ userInfo.key_pix }}
@@ -72,27 +83,27 @@
                   </v-col>
                 </v-row>
 
-                <v-divider class="my-1"></v-divider>
+                <v-divider class="my-2"></v-divider>
 
                 <v-row>
                   <v-col cols="12" md="4">
                     <span class="text-h6 ">
                       <span class="color">CEP:</span>
-                      {{ userInfo.zip_code}}
+                      {{ userInfo.address.zip_code}}
                     </span>
                   </v-col>
 
-                  <v-col cols="12" md="6">
+                  <v-col cols="12" md="5">
                     <span class="text-h6 ">
                       <span class="color">Cidade:</span>
-                      {{ userInfo.city }}
+                      {{ userInfo.address.city }}
                     </span>
                   </v-col>
 
-                  <v-col cols="12" md="2">
+                  <v-col cols="12" md="3">
                     <span class="text-h6 ">
                       <span class="color">Estado:</span>
-                      {{ userInfo.state }}
+                      {{ userInfo.address.state }}
                     </span>
                   </v-col>
                 </v-row>
@@ -101,28 +112,28 @@
                   <v-col cols="12" md="4">
                     <span class="text-h6 ">
                       <span class="color">Bairro:</span>
-                      {{ userInfo.district}}
+                      {{ userInfo.address.district}}
                     </span>
                   </v-col>
 
-                  <v-col cols="12" md="6">
+                  <v-col cols="12" md="5">
                     <span class="text-h6 ">
                       <span class="color">Logradouro:</span>
-                      {{ userInfo.public_place }}
+                      {{ userInfo.address.public_place }}
                     </span>
                   </v-col>
 
-                  <v-col cols="12" md="2">
+                  <v-col cols="12" md="3">
                     <span class="text-h6 ">
                       <span class="color">Número:</span>
-                      {{ userInfo.state }}
+                      {{ userInfo.address.number }}
                     </span>
                   </v-col>
 
                   <v-col cols="12">
                     <span class="text-h6 ">
                       <span class="color">Completento:</span>
-                      {{ userInfo.complement }}
+                      {{ userInfo.address.complement }}
                     </span>
                   </v-col>
                 </v-row>
@@ -134,7 +145,7 @@
                     dark
                     :outlined="!hover"
                     :elevation="hover ? 4 : 0"
-                    @click="showInfo = false"
+                    @click="showInfo.value = false"
                   >
                     OK
                   </v-btn>
@@ -152,7 +163,7 @@
 export default {
   name: 'InfoModal',
   props: {
-    showInfo: {
+    openInfo: {
       type: Boolean,
       default: false,
     },
@@ -163,14 +174,20 @@ export default {
   },
 
   computed: {
-    /* showInfo: {
+    showInfo: {
       get() {
         return this.openInfo
       },
       set(newValue) {
-        this.$emit('changeStateModal', newValue)
+        this.$emit('update:openInfo', newValue)
       },
-    }, */
+    },
   },
 }
 </script>
+
+<style scoped>
+.color {
+  color: #c3ab6a;
+}
+</style>
