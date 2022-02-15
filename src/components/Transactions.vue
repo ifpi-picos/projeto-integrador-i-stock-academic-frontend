@@ -1,7 +1,9 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-dialog v-model="dialog" persistent max-width="600px">
+      <v-dialog
+        v-model="dialog" persistent max-width="600px" 
+        :fullscreen="$vuetify.breakpoint.smAndDown">
         <v-card>
           <div v-if="isLoading" style="min-height: 4px">
             <v-progress-linear
@@ -131,7 +133,7 @@
                 tile
                 class="mr-4 justify-center"
                 :disabled="$v.collect.$error"
-                @click.native="saveTransation(dataChangeBalance.typeChange)"
+                @click.native="saveTransation()"
               >
                 Salvar
               </v-btn>
@@ -186,7 +188,11 @@ export default {
         required,
         minLength: minLength(10),
       },
-      material: { required },
+      material: {
+      required: requiredIf(function () {
+          return !this.dataChangeBalance.typeChange === 'deposit'
+        })
+      },
       kgPrice: {
         required: requiredIf(function () {
           return !this.dataChangeBalance.typeChange === 'deposit'
@@ -210,7 +216,7 @@ export default {
         material: '',
         kgPrice: undefined,
         kgQuantity: undefined,
-        deposit: 0,
+        deposit: undefined,
       },
       materialsList: ['Ferro', 'Alumínio', 'Cobre', 'Pet', 'Leitoso', 'Papelão'],
       
@@ -267,11 +273,12 @@ export default {
       this.collect.deposit = this.collect.kgPrice * this.collect.kgQuantity
     },
 
-    async saveTransation (method) {
+    async saveTransation () {
       this.$v.$touch()
+
       if (!this.$v.$error) {
         try {
-          if (method === 'deposit') {
+          if (this.dataChangeBalance.typeChange === 'deposit') {
             await this.$axios.post('/transactions', {
               type_operation: this.dataChangeBalance.typeChange,
               wallet_id: this.dataChangeBalance.wallet.id,
@@ -289,14 +296,24 @@ export default {
               responsible: this.collect.employeeName,
             })
           }
-          
-          this.$emit('updateBalance')
-          this.dialog = false
         } catch (err) {
           console.error(err)
+        } finally {
+          this.clearFields()
+
+          this.$emit('updateBalance')
+          this.dialog = false
         }
       }
     },
+
+    clearFields () {
+      this.collect.deposit = undefined
+      this.collect.kgQuantity = undefined
+      this.collect.kgPrice = undefined
+      this.collect.employeeName = ''
+      this.collect.material = ''
+    }
   },
 };
 </script>

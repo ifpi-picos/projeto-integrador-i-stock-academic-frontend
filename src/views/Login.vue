@@ -1,82 +1,86 @@
 <template>
-  <v-container fluid class="pa-0">
-    <v-row no-gutters>
-      <v-col cols="12" md="6" class="align-center justify-center align-content-center ">
-        <v-img class="image-leaf" src="../../public/img/leaf.jpeg"></v-img>
-      </v-col>
-      <v-col cols="12" md="6" class="align-center justify-center">
-        <v-card class="login px-6 py-16"
-          elevation="0">
-          <v-card-title style="color: #887725 " class="justify-center"><h1> Login </h1></v-card-title>
-          <v-form
-            @submit.stop.prevent="login()"
-            class="mt-16"
-            ref="form"
-            lazy-validation
-          >
-            <v-col cols="8" class="mx-auto">
-              <v-text-field
-                autocomplete="false"
-                v-model="email"
-                label="E-mail"
-                required>
-                <v-icon
-                  slot="prepend-inner"
-                  color="#5EBC64">
-                  mdi-at
-                </v-icon>
-              </v-text-field>
-            </v-col>
+  <v-app>
+    <v-main>
+      <v-container fluid style="padding: 0">
+        <v-row no-gutters>
+          <v-col cols="12" md="6" class="align-center justify-center align-content-center ">
+            <v-img class="image-leaf" src="../../public/img/leaf.jpeg"></v-img>
+          </v-col>
+          <v-col cols="12" md="6" class="align-center justify-center">
+            <v-card class="login px-6 py-16"
+              elevation="0">
+              <v-card-title style="color: #887725 " class="justify-center"><h1> Login </h1></v-card-title>
+              <v-form
+                @submit.stop.prevent="login()"
+                class="mt-16"
+                ref="form"
+                lazy-validation
+              >
+                <v-col cols="12" md="8"  class="mx-auto">
+                  <v-text-field
+                    autocomplete="false"
+                    v-model="email"
+                    label="E-mail"
+                    required>
+                    <v-icon
+                      slot="prepend-inner"
+                      color="#5EBC64">
+                      mdi-at
+                    </v-icon>
+                  </v-text-field>
+                </v-col>
 
-             <v-col cols="8" class="mx-auto">
-              <v-text-field
-                :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                :rules="[rules.required, rules.min]"
-                :type="show ? 'text' : 'password'"
-                v-model="password"
-                name="input-10-2"
-                label="Senha"
-                hint="At least 8 characters"
-                class="input-group--focused"
-                @click:append="show = !show"
-                required>
-                <v-icon
-                  slot="prepend-inner"
-                  color="#5EBC64">
-                  mdi-lock-outline
-                </v-icon>
-              </v-text-field>
-            </v-col>
+                <v-col cols="12" md="8"  class="mx-auto">
+                  <v-text-field
+                    :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                    :rules="[rules.required, rules.min]"
+                    :type="show ? 'text' : 'password'"
+                    v-model="password"
+                    name="input-10-2"
+                    label="Senha"
+                    hint="At least 8 characters"
+                    class="input-group--focused"
+                    @click:append="show = !show"
+                    required>
+                    <v-icon
+                      slot="prepend-inner"
+                      color="#5EBC64">
+                      mdi-lock-outline
+                    </v-icon>
+                  </v-text-field>
+                </v-col>
 
-            <v-col cols="8" class="mx-auto text-right" v-if="false">
-              <router-link style="color: #887725" to="signup">
-                ou Cadastre-se
-              </router-link>
-            </v-col>
+                <v-col cols="12" md="8" class="mx-auto text-right" v-if="false">
+                  <router-link style="color: #887725" to="signup">
+                    ou Cadastre-se
+                  </router-link>
+                </v-col>
 
-             <v-col cols="8" class="mx-auto">
-              <v-card-actions>
-                <v-hover
-                  class="button"
-                  v-slot="{ hover }">
-                  <v-btn
-                    type="submit"
-                    large
-                    :elevation="hover ? 16 : 2"
-                    :outlined="hover ? false : true"
-                    block
-                    color="success"
-                  >
-                    Entrar
-                  </v-btn>
-                </v-hover>
-              </v-card-actions>
-             </v-col>
-          </v-form>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+                <v-col cols="12" md="8" class="mx-auto px-0">
+                  <v-card-actions>
+                    <v-hover
+                      class="button"
+                      v-slot="{ hover }">
+                      <v-btn
+                        type="submit"
+                        large
+                        :elevation="hover ? 16 : 2"
+                        :outlined="hover ? false : true"
+                        block
+                        color="success"
+                      >
+                        Entrar
+                      </v-btn>
+                    </v-hover>
+                  </v-card-actions>
+                </v-col>
+              </v-form>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>

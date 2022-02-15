@@ -3,16 +3,18 @@
     <v-row>
       <v-col cols="auto">
         <v-dialog
+          v-model="showInfo"
           persistent
           transition="dialog-top-transition"
           max-width="800"
-          v-model="showInfo"
+          :fullscreen="$vuetify.breakpoint.smAndDown"
         >
           <template v-slot:default="showInfo">
             <v-card>
               <v-toolbar
                 color="#887725"
                 dark
+                :height="$vuetify.breakpoint.smAndDown ? '100' : '62'"
               >
               <v-card-title>
                 Detalhes da carteira <i class="ml-1"> {{ userInfo.wallet.wallet_code }} </i>
@@ -129,10 +131,19 @@
                       {{ userInfo.address.number }}
                     </span>
                   </v-col>
+                </v-row>
 
-                  <v-col cols="12">
+                <v-row>
+                  <v-col cols="12" md="5">
                     <span class="text-h6 ">
-                      <span class="color">Completento:</span>
+                      <span class="color">Rua:</span>
+                      {{ userInfo.address.street }}
+                    </span>
+                  </v-col>
+                   
+                  <v-col cols="12" md="7">
+                    <span class="text-h6 ">
+                      <span class="color">Complemento:</span>
                       {{ userInfo.address.complement }}
                     </span>
                   </v-col>

@@ -5,6 +5,7 @@
         v-model="dialog"
         persistent
         max-width="700px"
+        :fullscreen="$vuetify.breakpoint.smAndDown"
       >
         <v-card>
           <div v-if="isLoading" style="min-height: 4px;">
@@ -211,10 +212,10 @@
                 <v-row>
                   <v-col cols="12" md="6" class="py-0">
                     <v-text-field
-                      v-model="user.address.complement"
-                      label="Complemento"
-                      placeholder="Informe o complemento"
-                      prepend-inner-icon="mdi-notebook-edit"
+                      v-model="user.address.street"
+                      label="Rua"
+                      placeholder="Informe a rua"
+                      prepend-inner-icon="mdi-road"
                       color="primary"
                     />
                   </v-col>
@@ -224,7 +225,17 @@
                       v-model="user.address.number"
                       label="Número"
                       placeholder="Informe o número da residência ou ap"
-                      prepend-inner-icon="mdi-billboard"
+                      prepend-inner-icon="mdi-numeric"
+                      color="primary"
+                    />
+                  </v-col>
+
+                  <v-col cols="12" class="py-0">
+                    <v-text-field
+                      v-model="user.address.complement"
+                      label="Complemento"
+                      placeholder="Informe o complemento"
+                      prepend-inner-icon="mdi-notebook-edit"
                       color="primary"
                     />
                   </v-col>
@@ -325,6 +336,7 @@ export default {
         address: {
           CEP: '',
           city: '',
+          street: '',
           state: '',
           district: '',
           publicPlace: '',
@@ -509,7 +521,7 @@ export default {
         if (searchedCep?.status >= 200 && searchedCep?.status <= 207) {
           this.user.address.city = searchedCep.city
           this.user.address.state = searchedCep.state
-          this.user.address.publicPlace = searchedCep.address
+          this.user.address.street = searchedCep.address
           this.user.address.district = searchedCep.district
         }
       }
@@ -556,6 +568,28 @@ export default {
       }
     },
 
+    clearfields () {
+      this.clearAddress()
+
+      this.user.wallet = {}
+      this.user.fullName = ''
+      this.user.userPhoto = undefined
+      this.user.validcpfCnpj = undefined
+      this.user.phoneNumber = ''
+      this.pixSelected = ''
+      this.user.pix = ''
+      this.user.cpfCnpj = ''
+
+      this.user.address.CEP = ''
+      this.user.address.state = ''
+      this.user.address.street = ''
+      this.user.address.city = ''
+      this.user.address.district = ''
+      this.user.address.publicPlace = ''
+      this.user.address.complement = ''
+      this.user.address.number = ''
+    },
+
     async saveUser () {
       this.$v.$touch()
 
@@ -575,6 +609,7 @@ export default {
           await this.$axios.post('/address', {
             zip_code: this.user.address.CEP,
             state: this.user.address.state,
+            street: this.user.address.street,
             city: this.user.address.city,
             district: this.user.address.district,
             public_place: this.user.address.publicPlace,
@@ -582,16 +617,12 @@ export default {
             number: this.user.address.number,
             user_id: data.id
           })
-
-          this.user.wallet = ''
-          this.user.fullName = ''
-
-          this.clearAddress()
           
         } catch (err) {
           console.error(err)
         } finally {
           this.dialog = false
+          this.clearfields()
           this.$store.dispatch('CHANGE_ALERT', true)
         }
 
