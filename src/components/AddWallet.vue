@@ -5,6 +5,7 @@
         v-model="dialog"
         persistent
         max-width="700px"
+        :fullscreen="$vuetify.breakpoint.smAndDown"
       >
         <v-card>
           <div v-if="isLoading" style="min-height: 4px;">
@@ -520,7 +521,7 @@ export default {
         if (searchedCep?.status >= 200 && searchedCep?.status <= 207) {
           this.user.address.city = searchedCep.city
           this.user.address.state = searchedCep.state
-          this.user.address.publicPlace = searchedCep.address
+          this.user.address.street = searchedCep.address
           this.user.address.district = searchedCep.district
         }
       }
@@ -616,13 +617,12 @@ export default {
             number: this.user.address.number,
             user_id: data.id
           })
-
-          this.clearfields()
           
         } catch (err) {
           console.error(err)
         } finally {
           this.dialog = false
+          this.clearfields()
           this.$store.dispatch('CHANGE_ALERT', true)
         }
 

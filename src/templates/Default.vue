@@ -1,12 +1,15 @@
 <template>
   <v-app class="background">
+    <Navbar />
+
     <v-main>
-      <Navbar></Navbar>
-      <Alert />
-      <router-view>
-      </router-view>
-      <Footerbar class="fixed-bottom "></Footerbar>
+      <v-container fluid>
+        <Alert />
+        <router-view />
+      </v-container>
     </v-main>
+
+    <Footerbar />
   </v-app>
 </template>
 
@@ -31,6 +34,7 @@
 .background {
   background-color: #f1f0de !important;
   height: 100%;
+  max-width: 100vw !important;
 }
 
 .fixed-bottom {

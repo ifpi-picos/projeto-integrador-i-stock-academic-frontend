@@ -8,7 +8,7 @@
       </v-row>
 
       <v-row class="justify-center">
-        <v-col cols="4">
+        <v-col cols="12" md="4">
           <v-hover v-slot="{ hover }">
             <v-card :elevation="hover ? 16 : 1"
               class="card-border">
@@ -38,7 +38,7 @@
           </v-hover>
         </v-col>
 
-        <v-col cols="4">
+        <v-col cols="12" md="4">
           <v-hover v-slot="{ hover }">
             <v-card :elevation="hover ? 16 : 1"
               class="card-border">

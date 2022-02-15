@@ -2,10 +2,10 @@
   <div>
     <v-container fluid>
       <v-row class="justify-center">
-        <v-col cols="12" md="8">
+        <v-col cols="12" md="8" class="px-0">
           <v-card elevation="6">
             <v-card-title class="justify-center mb-3">
-              <h1 style="color: #887725">Lista de Carteiras</h1>
+              <span style="color: #887725" class="text-h4">Lista de Carteiras</span>
             </v-card-title>
 
             <v-simple-table fixed-header>
@@ -31,7 +31,7 @@
                     <td>{{ user.name }}</td>
                     <td>{{ user.wallet ? user.wallet.wallet_code : "" }}</td>
                     <td>{{ getBalance(user.wallet.wallet_transactions) }}</td>
-                    <td class="text-center">
+                    <td class="text-center" :class="$vuetify.breakpoint.smAndDown ? 'py-2' : ''">
                       <v-hover v-slot="{ hover }">
                         <v-tooltip top color="#887725">
                           <template v-slot:activator="{ on, attrs }">
@@ -71,6 +71,7 @@
                               dark
                               color="error"
                               class="mx-2 justify-center py-3 pr-1 pl-0"
+                              :class="$vuetify.breakpoint.smAndDown ? 'my-2' : ''"
                               @click="
                                 dataChangeBalance.wallet = user.wallet
                                 dataChangeBalance.typeChange = 'withdraw'

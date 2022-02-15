@@ -1,9 +1,7 @@
 <template>
-  <v-app>
-    <v-main class="background pa-0">
-      <router-view/>
-    </v-main>
-  </v-app>
+  <div class="background">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
