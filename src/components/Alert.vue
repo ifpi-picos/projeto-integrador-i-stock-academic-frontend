@@ -1,17 +1,19 @@
 <template>
-  <v-container class="alert">
+  <v-container v-if="success" class="alert" fluid>
     <v-row>
-      <v-col cols="5" class="ml-auto">
+      <v-col cols="12" md="5" class="ml-auto">
         <v-alert
           :value="success"
           border="left"
           color="#5EBC64"
           dense
-          outlined
+          :outlined="$vuetify.breakpoint.mdAndUp"
           prominent
-          text
+          :text="$vuetify.breakpoint.mdAndUp"
           type="success"
-          transition="scale-transition">
+          transition="scale-transition"
+          dismissible
+        >
           {{ message }}
         </v-alert>
       </v-col>
@@ -45,7 +47,7 @@ export default {
 <style scoped>
 .alert {
   position: absolute;
-  left: 7.5rem;
+  right: .3rem;
   top: 0;
   z-index: 1;
 }
