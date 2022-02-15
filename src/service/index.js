@@ -5,6 +5,10 @@ const api = Axios.create({
   baseURL: 'https://stock-academic-api.herokuapp.com/api'
 })
 
+const api2 = Axios.create({
+  baseURL: 'https://ws.apicep.com/cep/'
+})
+
 const logout = () => {
   localStorage.clear()
   window.location.reload()
@@ -46,5 +50,6 @@ api.interceptors.response.use(function (response) {
 Vue.use({
   install(Vue) {
     Vue.prototype.$axios = api
+    Vue.prototype.$axios2 = api2
   }
 })
