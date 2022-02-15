@@ -2,16 +2,6 @@
   <v-container>
     <v-row justify="center">
       <v-dialog v-model="dialog" persistent max-width="600px">
-        <!-- <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
-            Criar
-          </v-btn>
-        </template> -->
         <v-card>
           <div v-if="isLoading" style="min-height: 4px">
             <v-progress-linear
@@ -21,9 +11,9 @@
           </div>
           <v-card-title>
             <span v-if="dataChangeBalance.typeChange === 'deposit'" class="text-h5"
-              >Adicionar Saldo</span
+              >Depositar</span
             >
-            <span v-else class="text-h5">Retirar Saldo</span>
+            <span v-else class="text-h5">Sacar</span>
           </v-card-title>
           <v-card-text>
             <v-container>
@@ -32,8 +22,8 @@
                   <span>
                     {{
                       dataChangeBalance.typeChange === "deposit"
-                        ? "Adicionando"
-                        : "Removendo"
+                        ? "Depositando"
+                        : "Sacando"
                     }}
                     {{ collect.deposit }} créditos na sua carteira <br>
                     <code>{{
@@ -62,7 +52,7 @@
                   </v-col>
                 </v-row>
 
-                <v-row>
+                <v-row v-if="dataChangeBalance.typeChange === 'deposit'">
                   <v-col cols="12" md="6" class="py-0">
                     <v-select
                       v-model="collect.material"
@@ -94,7 +84,7 @@
                 </v-row>
 
                 <v-row>
-                  <v-col cols="12" md="6" class="py-0">
+                  <v-col v-if="dataChangeBalance.typeChange === 'deposit'" cols="12" md="6" class="py-0">
                     <v-text-field
                       v-model="collect.kgQuantity"
                       :error-messages="kgQuantityErrors"
@@ -114,8 +104,8 @@
                       v-model="collect.deposit"
                       :label="
                         dataChangeBalance.typeChange === 'deposit'
-                          ? 'Valor de depósito'
-                          : 'Valor de retirada'
+                          ? 'Valor de depósito*'
+                          : 'Valor de retirada*'
                       "
                       prepend-inner-icon="mdi-currency-brl"
                       type="number"
@@ -141,7 +131,7 @@
                 tile
                 class="mr-4 justify-center"
                 :disabled="$v.collect.$error"
-                @click.native="saveTransation()"
+                @click.native="saveTransation(dataChangeBalance.typeChange)"
               >
                 Salvar
               </v-btn>
@@ -169,7 +159,7 @@
 <script>
 import { validationMixin } from 'vuelidate'
 
-import { required, minLength } from 'vuelidate/lib/validators'
+import { required, requiredIf, minLength } from 'vuelidate/lib/validators'
 
 export default {
   name: 'AddWallet',
@@ -197,8 +187,17 @@ export default {
         minLength: minLength(10),
       },
       material: { required },
-      kgPrice: { required },
-      kgQuantity: { required },
+      kgPrice: {
+        required: requiredIf(function () {
+          return !this.dataChangeBalance.typeChange === 'deposit'
+        })
+      },
+      kgQuantity: {
+        required: requiredIf(function () {
+          return !this.dataChangeBalance.typeChange === 'deposit'
+        })
+      },
+      deposit: { required },
     }
   },
 
@@ -268,20 +267,29 @@ export default {
       this.collect.deposit = this.collect.kgPrice * this.collect.kgQuantity
     },
 
-    async saveTransation () {
+    async saveTransation (method) {
       this.$v.$touch()
       if (!this.$v.$error) {
         try {
-          await this.$axios.post('/transactions', {
-            type_operation: this.dataChangeBalance.typeChange,
-            wallet_id: this.dataChangeBalance.wallet.id,
-            total_value: this.collect.deposit,
-            responsible: this.collect.employeeName,
-            kgs: this.collect.kgQuantity,
-            price_kg: this.collect.kgPrice,
-            type_material: this.collect.material,
-          })
-
+          if (method === 'deposit') {
+            await this.$axios.post('/transactions', {
+              type_operation: this.dataChangeBalance.typeChange,
+              wallet_id: this.dataChangeBalance.wallet.id,
+              total_value: this.collect.deposit,
+              responsible: this.collect.employeeName,
+              kgs: this.collect.kgQuantity,
+              price_kg: this.collect.kgPrice,
+              type_material: this.collect.material,
+            })
+          } else {
+            await this.$axios.post('/transactions', {
+              type_operation: this.dataChangeBalance.typeChange,
+              wallet_id: this.dataChangeBalance.wallet.id,
+              total_value: this.collect.deposit,
+              responsible: this.collect.employeeName,
+            })
+          }
+          
           this.$emit('updateBalance')
           this.dialog = false
         } catch (err) {

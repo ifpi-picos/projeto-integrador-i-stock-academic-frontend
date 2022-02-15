@@ -47,7 +47,7 @@
               </v-col> 
             </v-row>
 
-            <v-row v-if="user.wallet" align="center">
+            <v-row v-if="user.wallet.id" align="center">
               <v-col cols="12" md="3">
                 <v-img
                   v-if="user.userPhoto"
