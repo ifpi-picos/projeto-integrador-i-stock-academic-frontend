@@ -12,7 +12,7 @@
           <v-hover v-slot="{ hover }">
             <v-card :elevation="hover ? 16 : 1"
               class="card-border">
-              <v-card-title class="">Criar carteiras</v-card-title>
+              <v-card-title class="">Criar Carteiras</v-card-title>
 
               <v-card-text>Crie aqui uma nova <code>Carteira</code></v-card-text>
               <v-card-actions>
