@@ -129,10 +129,19 @@
                       {{ userInfo.address.number }}
                     </span>
                   </v-col>
+                </v-row>
 
-                  <v-col cols="12">
+                <v-row>
+                  <v-col cols="12" md="5">
                     <span class="text-h6 ">
-                      <span class="color">Completento:</span>
+                      <span class="color">Rua:</span>
+                      {{ userInfo.address.street }}
+                    </span>
+                  </v-col>
+                   
+                  <v-col cols="12" md="7">
+                    <span class="text-h6 ">
+                      <span class="color">Complemento:</span>
                       {{ userInfo.address.complement }}
                     </span>
                   </v-col>

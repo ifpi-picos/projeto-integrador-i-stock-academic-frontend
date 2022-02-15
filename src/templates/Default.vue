@@ -5,7 +5,7 @@
       <Alert />
       <router-view>
       </router-view>
-      <Footerbar></Footerbar>
+      <Footerbar class="fixed-bottom "></Footerbar>
     </v-main>
   </v-app>
 </template>
@@ -30,6 +30,7 @@
 <style scoped>
 .background {
   background-color: #f1f0de !important;
+  height: 100%;
 }
 
 .fixed-bottom {
