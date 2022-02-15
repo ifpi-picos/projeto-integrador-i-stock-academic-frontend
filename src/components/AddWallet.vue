@@ -18,7 +18,7 @@
           </v-card-title>
           <v-card-text>
             <v-row>
-              <v-col >
+              <v-col cols="12" md="6">
                 <v-hover v-slot="{ hover }">
                   <v-btn
                     :elevation="hover ? 12 : 0"
@@ -44,11 +44,22 @@
                     Gerar nova carteira
                   </v-btn>
                 </v-hover>
-              </v-col>
+              </v-col> 
             </v-row>
 
-            <v-row v-if="user.wallet">
-              <v-col>
+            <v-row v-if="user.wallet.id" align="center">
+              <v-col cols="12" md="3">
+                <v-img
+                  v-if="user.userPhoto"
+                  :src="user.userPhoto"
+                  width="70"
+                  height="70"
+                  class="ml-2 rounded-pill elevation-10"
+                />
+                <v-icon size="60" v-else>mdi-account-tie</v-icon>
+              </v-col>
+
+              <v-col cols="12" md="9">
                 <span>
                   O número da sua carteira é:<br /><code class="pl-0">{{ user.wallet.wallet_code }}</code>
                 </span>
@@ -63,7 +74,7 @@
                       label="Foto do usuário"
                       accept="image/png, image/jpeg, image/bmp, image/jpg"
                       prepend-inner-icon="mdi-camera"
-                      v-model="user.userPhoto"
+                      @change="uploadPhoto($event)"
                     />
                   </v-col>
 
@@ -96,12 +107,11 @@
                       color="primary"
                       @change="$v.user.cpfCnpj.$touch()"
                       @blur="$v.user.cpfCnpj.$touch()"
-
-                    >
+                    > 
                       <v-icon v-if="user.validcpfCnpj" slot="append" color="primary">
                         mdi-check-bold
                       </v-icon>
-                      <v-icon v-else slot="append" color="error">
+                      <v-icon v-if="$v.user.cpfCnpj.$error || cpfCnpjErrors.length > 0" slot="append" color="error">
                         mdi-close-thick
                       </v-icon>
                     </v-text-field>
@@ -187,10 +197,11 @@
                   </v-col>
 
                   <v-col cols="12" md="6" class="py-0">
-                    <v-text-field
+                    <v-select
                       v-model="user.address.publicPlace"
+                      :items="publicPlaces"
                       label="Logradouro"
-                      placeholder="Informe a descrição logradouro"
+                      placeholder="Selecione o logradouro"
                       prepend-inner-icon="mdi-home-city-outline"
                       color="primary"
                     />
@@ -233,7 +244,7 @@
                     tile
                     :disabled="!user.fullName || !user.wallet || !user.cpfCnpj || !user.phoneNumber || !user.address.CEP"
                     class="mr-4 justify-center"
-                    @click="saveWallet()"
+                    @click="saveUser()"
                   >
                     Salvar
                   </v-btn>
@@ -301,14 +312,14 @@ export default {
     }
   },
 
-  data () {
-    return {
+  data: () => ({
       isLoading: false,
       user: {
-        wallet: '',
+        fullName: '',
+        wallet: {},
         userPhoto: undefined,
         cpfCnpj: '',
-        validcpfCnpj: '',
+        validcpfCnpj: undefined,
         phoneNumber: '',
         pix: '',
         address: {
@@ -317,14 +328,16 @@ export default {
           state: '',
           district: '',
           publicPlace: '',
-          number: null,
+          number: '',
           complement: '',
         }
       },
       pixSelected: '',
       pixList: [
-        'Telefone',
-        'CPF/CNPJ',
+        { text: 'Telefone', value: 'phone' },
+        { text: 'CPF/CNPJ', value: 'cpf/cnpj' },
+        { text: 'Email', value: 'email', disabled: true },
+        { text: 'Aleatória', value: 'random', disabled: true },
       ],
       statesList: [
         'AC',
@@ -355,8 +368,51 @@ export default {
         'SE',
         'TO',
       ],
-    }
-  },
+      publicPlaces: [
+        'Aeroporto',
+        'Alameda',
+        'Área',
+        'Avenida',
+        'Campo',
+        'Chácara',
+        'Colônia',
+        'Condomínio',
+        'Conjunto',
+        'Distrito',
+        'Esplanada',
+        'Estação',
+        'Estrada',
+        'Favela',
+        'Fazenda',
+        'Feira',
+        'Jardim',
+        'Ladeira',
+        'Lago',
+        'Lagoa',
+        'Largo',
+        'Loteamento',
+        'Morro',
+        'Núcleo',
+        'Parque',
+        'Passarela',
+        'Pátio',
+        'Praça',
+        'Quadra',
+        'Recanto',
+        'Residencial',
+        'Rodovia',
+        'Rua',
+        'Setor',
+        'Sítio',
+        'Travessa',
+        'Vale',
+        'Vereda',
+        'Via',
+        'Viaduto',
+        'Viela',
+        'Vila',
+      ]
+  }),
 
   computed: {
     dialog: {
@@ -371,9 +427,10 @@ export default {
     cpfCnpjErrors () {
       const errors = []
       if (!this.$v.user.cpfCnpj.$dirty) return errors
-      !this.user.validcpfCnpj && errors.push('O CPF/CNPJ informado não é válido.')
-      !this.$v.user.cpfCnpj.required && errors.push('O CPF é obrigatório.')
+      !this.user.validcpfCnpj && this.$v.user.cpfCnpj.required && errors.push('O CPF/CNPJ informado não é válido.')
+      !this.$v.user.cpfCnpj.required && errors.push('O CPF/CNPJ é obrigatório.')
       !this.$v.user.cpfCnpj.minLength && errors.push('Infome ao menos 14 números.')
+
       return errors
     },
 
@@ -413,8 +470,8 @@ export default {
       this.isLoading = true
 
       try {
-        const { data } = await this.$axios.post('/wallet')
-        this.user.wallet = data.wallet
+        const { data: { data } } = await this.$axios.post('/wallet')
+        this.user.wallet = data
 
       } catch (err) {
         console.error(err)
@@ -471,25 +528,66 @@ export default {
     },
 
     verifyPixKey () {
-      if (this.pixSelected === 'Telefone') {
+      if (this.pixSelected === 'phone') {
         this.user.pix = this.user.phoneNumber
-      } else if (this.pixSelected === 'CPF/CNPJ') {
+      } else if (this.pixSelected === 'cpf/cnpj') {
         this.user.pix = this.user.cpfCnpj
       }
     },
 
-    async saveWallet () {
+    async uploadPhoto (image) {
+
+      if (!image) {
+        return
+      }
+
+      try {
+        const formData = new FormData()
+
+        formData.append('file', image)
+
+        const { data: { data } } = await this.$axios.post('/file-upload', formData, {
+          "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+        })
+
+        this.user.userPhoto = data.urlFile
+      } catch (err) {
+        console.error(err)
+      }
+    },
+
+    async saveUser () {
       this.$v.$touch()
 
       if (!this.$v.$error) {
         try {
-          const { data } = await this.$axios.post('/users', {name: this.user.fullName})
-          const userId = data.id
+          const { data: { data } }= await this.$axios.post('/users', {
+            name: this.user.fullName,
+            nickname: "Beowolf",
+            user_photo: this.user.userPhoto,
+            phone: this.user.phoneNumber,
+            type_key_pix: this.pixSelected,
+            key_pix: this.user.pix,
+            cpf_or_cnpj: this.user.cpfCnpj,
+            wallet_id: this.user.wallet.id,
+          })
 
-          await this.$axios.patch('/wallet/bindUser', {user_id: userId, wallet_id: this.user.wallet.id})
+          await this.$axios.post('/address', {
+            zip_code: this.user.address.CEP,
+            state: this.user.address.state,
+            city: this.user.address.city,
+            district: this.user.address.district,
+            public_place: this.user.address.publicPlace,
+            complement: this.user.address.complement,
+            number: this.user.address.number,
+            user_id: data.id
+          })
 
           this.user.wallet = ''
           this.user.fullName = ''
+
+          this.clearAddress()
+          
         } catch (err) {
           console.error(err)
         } finally {
